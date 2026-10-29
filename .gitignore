@@ -1,0 +1,13 @@
+node_modules
+dist
+build
+.astro
+.wrangler
+
+# Secrets never go in the repo
+.env
+.env.*
+.dev.vars
+*.key
+secrets/
+
