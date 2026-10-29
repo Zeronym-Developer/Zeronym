@@ -80,8 +80,6 @@ node apps/site/public/verify/verify-mainnet.mjs --json
 
 This reads the public chain and submits no transactions. It checks admin powers, classifies pool transactions and rechecks their proofs. The public RPC is the default; set `RPC_URL` in your shell to use another endpoint.
 
-## Deployed source and archived inputs
-
-The shipped `contracts/pool/verification/std-pool.json` predates the current pool admin interface: it includes a deposit-cap mapping and a three-argument `setToken`, whereas the current source has no deposit cap and uses two arguments. The archive is preserved unchanged. Use the verified source on the deployed pool's explorer or Sourcify page when comparing deployed source; do not use this archived input as evidence of a current match.
+## Contract changes
 
 Editing local Solidity, circuit or deployment files does not change live contracts. Keep those changes explicit and review their relationship to the deployed addresses before proposing a release.

@@ -140,8 +140,6 @@ It uses Robinhood Chain's public RPC by default. An optional `RPC_URL` environme
 
 The proving setup uses PSE perpetual powers of tau for phase 1, four phase 2 contributions and the hash of Robinhood Chain block **98,488,820** as the public beacon.
 
-**Archived input:** `contracts/pool/verification/std-pool.json` predates the current pool admin interface. It is preserved as supplied and should not be used to establish a source match for the current pool. Use the deployed explorer or Sourcify source for that comparison.
-
 ## Contributing and security
 
 Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Report vulnerabilities privately to **support@zeronym.lat**, as described in [SECURITY.md](SECURITY.md).

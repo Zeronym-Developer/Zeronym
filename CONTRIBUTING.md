@@ -10,7 +10,7 @@ Keep a change focused. Explain the behavior it changes and the checks you ran. U
 
 Use Node.js 24 and follow [Getting started](docs/GETTING_STARTED.md). Run the checks that cover your change. The six workflows under `.github/workflows` show the commands used in CI.
 
-Contract source, circuits, deployment records and verification inputs require explicit review. Do not make incidental formatting changes or regenerate these files as part of an unrelated app change. A proposed protocol change should explain its effect on proofs, existing notes and deployed contracts. See the [archived input caveat](docs/GETTING_STARTED.md#deployed-source-and-archived-inputs) before using the supplied standard JSON file for a source comparison.
+Contract source, circuits, deployment records and verification inputs require explicit review. Do not make incidental formatting changes or regenerate these files as part of an unrelated app change. A proposed protocol change should explain its effect on proofs, existing notes and deployed contracts.
 
 Keep Cloudflare account and D1 IDs as placeholders in the published configuration. Do not commit `.env`, `.dev.vars`, keys, recovery phrases, access tokens or RPC credentials.
 
