@@ -1,0 +1,59 @@
+{
+  "network": "robinhood-chain-mainnet",
+  "chainId": 4663,
+  "status": "mainnet",
+  "contracts": {
+    "hasher": {
+      "address": "0xc94243f257b9ac32a458d73fad37f46fcd0202e1",
+      "deployTx": "0x77425e355edcd5c88feea87aba62b6faa742cd5f78ef06f37c6dd13d878d43cb",
+      "block": 98500530,
+      "explorer": "https://robinhoodchain.blockscout.com/address/0xc94243f257b9ac32a458d73fad37f46fcd0202e1"
+    },
+    "verifier": {
+      "address": "0xa1cb0bf67c66749bd6075ead69fb1ede77757101",
+      "deployTx": "0x51ae1231707d9c787fadd4baf221b8261e3e1f948755628b809c90cc3601fda3",
+      "block": 98500606,
+      "explorer": "https://robinhoodchain.blockscout.com/address/0xa1cb0bf67c66749bd6075ead69fb1ede77757101"
+    },
+    "pool": {
+      "address": "0x84c21f20959f0d00892007f2a7cfe46d19077877",
+      "deployTx": "0xccc885221fafb285910055cc6bd6ebbcb5485b2e3fce2df85dffbfd6979972df",
+      "block": 100011515,
+      "explorer": "https://robinhoodchain.blockscout.com/address/0x84c21f20959f0d00892007f2a7cfe46d19077877"
+    },
+    "ethExit": {
+      "address": "0xcf05a3b5e418dd0afe3ffb075f7b64c27019bb63",
+      "deployTx": "0xb9c3d04dd7ff86eeee6045560c09eb566cf106d2702f5d711b4afdadac3a465d",
+      "block": 100050507,
+      "explorer": "https://robinhoodchain.blockscout.com/address/0xcf05a3b5e418dd0afe3ffb075f7b64c27019bb63",
+      "pool": "0x84c21f20959f0d00892007f2a7cfe46d19077877",
+      "router": "0xCaf681a66D020601342297493863E78C959E5cb2",
+      "weth": "0x0Bd7D308f8E1639FAb988df18A8011f41EAcAD73"
+    }
+  },
+  "tokens": {
+    "USDG": {
+      "address": "0x5fc5360d0400a0fd4f2af552add042d716f1d168",
+      "decimals": 6,
+      "faucet": false,
+      "issuer": "Paxos"
+    }
+  },
+  "admin": "0xFB4ff79d6BD9563b9f9c85Ce0Aa16271eA904Ae3",
+  "levels": 20,
+  "circuit": {
+    "name": "transaction(20, 2, 2)",
+    "wasmSha256": "9a08514df2368304555ab16a576013617c0c1484b5cfd28051a50f54f20d5ce5",
+    "zkeySha256": "db7e6e3bd5970bc727e58874dbd2cdac049c16e5a8a558fd0028a52ab933ecff",
+    "ptau": "PSE perpetual powers of tau, ppot_0080_15.ptau (phase 1)",
+    "phase2": "4 contributors + beacon 2c6d7a5a03b57b789d0775d9a057de385874d38fed1fabf43b6f08ede89af566",
+    "beaconBlock": 98488820
+  },
+  "adminKind": "multisig",
+  "compiler": "0.8.24+commit.e11b9ed9.Emscripten.clang",
+  "deployedAt": "2026-10-28T10:39:51.000Z",
+  "adminTxs": {
+    "setToken": "0x51c11aa534688686f347bd2bb37c45fe366081751d27db28e7defa8a695f1081",
+    "setAdmin": "0xec843b7f69d8bdb03e9a437fa28c07a1a124721102d3d80c8e688ab06ad47732"
+  }
+}

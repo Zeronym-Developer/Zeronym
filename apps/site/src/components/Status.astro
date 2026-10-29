@@ -1,0 +1,15 @@
+---
+interface Props { status: string }
+const { status } = Astro.props;
+const map: Record<string, [string, string]> = {
+  'design-draft': ['◐', 'Protocol design draft · not yet deployed'],
+  'not-published': ['◐', 'Not published'],
+  'planned': ['○', 'Planned'],
+  'testnet': ['◑', 'Testnet · no value'],
+  'mainnet': ['●', 'Mainnet'],
+  'candidate': ['○', 'Coming soon · in progress'],
+  'not-active': ['○', 'Not active'],
+};
+const [sym, label] = map[status] ?? ['○', status];
+---
+<span class="status" data-s={status}><span class="sym" aria-hidden="true">{sym}</span>{label}</span>

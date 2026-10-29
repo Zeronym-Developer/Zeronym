@@ -1,0 +1,40 @@
+---
+// The Zeronym app. Every route is a static page that boots the same client app,
+// so reloads and shared links work without a server.
+import '@fontsource/space-grotesk/500.css';
+import '@fontsource/space-grotesk/600.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
+import '../../styles/tokens.css';
+import '../../app/app.css';
+import '../../app/brand.css';
+
+export function getStaticPaths() {
+  return ['', 'shield', 'send', 'receive', 'withdraw', 'assets', 'vaults', 'activity', 'receipts', 'account', 'fallback'].map((r) => ({ params: { route: r || undefined } }));
+}
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Zeronym app</title>
+  <meta name="description" content="Zeronym app. Shield, send and withdraw USDG privately on Robinhood Chain with the pool. Keys stay in your browser. To look around without funds, pick Demo wallet under Connect a wallet: it simulates everything in your browser." />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+</head>
+<body class="app-body">
+  <div id="zn-app">
+    <div class="aboot"><img src="/zeronym-icon.webp" width="190" height="120" alt="" /><span>Loading Zeronym…</span></div>
+  </div>
+  <noscript><p class="anojs">The Zeronym app needs JavaScript: keys are made and encrypted in your browser. You can still read the <a href="/docs/">docs</a>.</p></noscript>
+  <script>
+    import '../../app/main';
+  </script>
+</body>
+</html>

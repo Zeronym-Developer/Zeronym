@@ -1,0 +1,22 @@
+---
+import Base from './Base.astro';
+import '../styles/sections.css';
+import '../styles/pages.css';
+interface Props { title: string; path: string; description: string; updated: string }
+const { title, path, description, updated } = Astro.props;
+---
+<Base title={title} path={path} description={description}>
+  <div class="z-container lg">
+    <article class="lg-doc">
+      <header class="lg-head">
+        <p class="lg-date">Last updated {updated}</p>
+        <h1 data-words>{title}</h1>
+        <p class="lg-draft"><i aria-hidden="true"></i>This is a draft that hasn't been reviewed by a lawyer yet.</p>
+      </header>
+      <div class="lg-body"><slot /></div>
+    </article>
+  </div>
+  <script>
+    import '../scripts/sections';
+  </script>
+</Base>

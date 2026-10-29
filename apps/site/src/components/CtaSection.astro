@@ -1,0 +1,19 @@
+---
+// Closing call to action with the particle wordmark in the background.
+interface Props { n: string; kicker: string; title: string; em: string; body: string; primary: [string, string]; secondary?: [string, string]; word?: string; h1?: boolean }
+const { n, kicker, title, em, body, primary, secondary, word = 'ZERONYM', h1 = false } = Astro.props;
+const H = h1 ? 'h1' : 'h2';
+---
+<section class="lp-cta" id="lp-cta" aria-labelledby="cta-h">
+  <div class="lp-cta-glow" aria-hidden="true"></div>
+  <div class="lp-cta-word" data-word={word} aria-hidden="true"><canvas id="lp-word"></canvas><span>{word}</span></div>
+  <div class="z-container lp-cta-in" data-reveal>
+    <p class="lp-kicker">{n && <span>{n}</span>}{kicker}</p>
+    <H id="cta-h" data-words>{title} <em>{em}</em></H>
+    <p>{body}</p>
+    <div class="btn-row">
+      <a class="z-button z-button-primary" href={primary[0]}>{primary[1]}</a>
+      {secondary && <a class="z-button z-button-secondary" href={secondary[0]}>{secondary[1]}</a>}
+    </div>
+  </div>
+</section>

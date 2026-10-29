@@ -1,0 +1,93 @@
+{
+  "network": "robinhood-chain-testnet",
+  "chainId": 46630,
+  "status": "testnet",
+  "contracts": {
+    "hasher": {
+      "address": "0x51d002b920edc058f7ec9563020b539c805f52d5",
+      "deployTx": "0xaccb8812f8df87a120a4ec5f100ea25f1e6587944b21fb18c4db5b072e7cabef",
+      "block": 141256209,
+      "explorer": "https://explorer.testnet.chain.robinhood.com/address/0x51d002b920edc058f7ec9563020b539c805f52d5"
+    },
+    "verifier": {
+      "address": "0xbb313bf9e22d89f3a8e5cd85d8484ffd64c5289a",
+      "deployTx": "0x47983a7d1eefa86e6acccad22a8dcb3cb6c985900e2c981015cc029b3c200a74",
+      "block": 141256220,
+      "explorer": "https://explorer.testnet.chain.robinhood.com/address/0xbb313bf9e22d89f3a8e5cd85d8484ffd64c5289a"
+    },
+    "testDollar": {
+      "address": "0x1b0f22cca70bf5022dc577718f6a03223aaeb672",
+      "deployTx": "0x75b9439717ddd11eb384b79482496d0ec55ccb3972a309db66cd3cfb2fcd2c99",
+      "block": 141256232,
+      "explorer": "https://explorer.testnet.chain.robinhood.com/address/0x1b0f22cca70bf5022dc577718f6a03223aaeb672"
+    },
+    "pool": {
+      "address": "0xd260bd358a610d70905bcaa2f61f185a16f99311",
+      "deployTx": "0x673e04ffb13194919cfda49ddd9082f602a245977c05413800a1c52f8794709d",
+      "block": 141262974,
+      "explorer": "https://explorer.testnet.chain.robinhood.com/address/0xd260bd358a610d70905bcaa2f61f185a16f99311"
+    }
+  },
+  "tokens": {
+    "tUSD": {
+      "address": "0x1b0f22cca70bf5022dc577718f6a03223aaeb672",
+      "decimals": 6,
+      "maxDeposit": "10000000000",
+      "faucet": true,
+      "retired": true
+    },
+    "tZNYM": {
+      "address": "0x45fdb904eea7b0acbc3371208a6cbefbfc6a287a",
+      "decimals": 18,
+      "maxDeposit": "1000000000000000000000000",
+      "faucet": false
+    },
+    "USDG": {
+      "address": "0x7e955252e15c84f5768b83c41a71f9eba181802f",
+      "decimals": 6,
+      "maxDeposit": "10000000000",
+      "faucet": false,
+      "issuer": "Paxos testnet USDG",
+      "faucetUrl": "https://faucet.paxos.com/"
+    }
+  },
+  "admin": "0x4029b00f6929e14fA00da2D394314a5a1722E1e5",
+  "levels": 20,
+  "compiler": "0.8.24+commit.e11b9ed9.Emscripten.clang",
+  "circuit": {
+    "name": "transaction(20, 2, 2)",
+    "wasmSha256": "f3f40c0c738a2c67b4e0b277c8cf1620462ee391e6db57a1d3fafa01e5a24f9a",
+    "zkeySha256": "0c270609aa9fd5fe7fb26a9df8158c6b0fa3b86c3c3f9f5fe09deccd05b13af8",
+    "ptau": "PSE perpetual powers of tau, ppot_0080_15.ptau (phase 1)",
+    "phase2": "single contributor, testnet only"
+  },
+  "retired": [
+    {
+      "address": "0x0858d8a6f355184901f0716a2c4ebd7355515715",
+      "deployTx": "0x3342b702bbc8dc31d23853bf8da14aa9bf099538fb1ab527cf214c2622e30d4f",
+      "block": 141256241,
+      "explorer": "https://explorer.testnet.chain.robinhood.com/address/0x0858d8a6f355184901f0716a2c4ebd7355515715",
+      "retiredAt": "2026-10-23",
+      "reason": "Replaced by a version where turning a token off stops deposits only, never withdrawals."
+    }
+  ],
+  "deployedAt": "2026-10-23T09:47:56.366Z",
+  "tokenChanges": [
+    {
+      "token": "USDG",
+      "address": "0x7E955252E15c84f5768B83c41a71F9eba181802F",
+      "supported": true,
+      "maxDeposit": "10000000000",
+      "tx": "0x254bd555d9dcaec1e6c04dd4f16e511d729aa324dd9c1c50d8d6a78ac661c5b7",
+      "block": 141649303
+    },
+    {
+      "token": "tUSD",
+      "address": "0x1b0f22cCa70BF5022dC577718F6A03223AAEB672",
+      "supported": false,
+      "maxDeposit": "0",
+      "tx": "0x414e14af9fc7849a77e9c04e792b62b4c01a764c2e446ebf416888755b51cff4",
+      "block": 141649319
+    }
+  ]
+}

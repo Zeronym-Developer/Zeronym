@@ -1,0 +1,27 @@
+{
+  "name": "zeronym-pool",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Zeronym shielded pool: Circom circuits (Groth16) and Solidity contracts.",
+  "scripts": {
+    "circuit": "node scripts/build-circuit.mjs",
+    "compile": "node scripts/compile.mjs",
+    "test": "node --test test/pool.test.mjs",
+    "deploy": "node scripts/deploy-mainnet.mjs",
+    "test:eth-exit": "node --test test/eth-exit.test.mjs",
+    "deploy:eth-exit": "node scripts/deploy-eth-exit.mjs"
+  },
+  "dependencies": {
+    "@noble/curves": "^1.9.7",
+    "@noble/hashes": "^1.8.0",
+    "@openzeppelin/contracts": "^5.1.0",
+    "circomlib": "^2.0.5",
+    "circomlibjs": "^0.1.7",
+    "ganache": "^7.9.2",
+    "poseidon-lite": "^0.3.0",
+    "snarkjs": "^0.7.6",
+    "solc": "^0.8.24",
+    "viem": "^2.57.10"
+  }
+}

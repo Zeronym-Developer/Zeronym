@@ -1,0 +1,42 @@
+---
+// Payment link landing page: /pay/#to=zn1…&amount=20&asset=USDG&memo=…&exp=…
+// The details sit after the #, so browsers never send them to the server and link previews
+// can't show them. The preview card is the same for every link. The script below fills in
+// the visible card for whoever opens the link.
+import Base from '../layouts/Base.astro';
+import '../styles/pay.css';
+---
+<Base title="Private payment request" path="/pay/" description="Someone sent you a private USDG payment request on Zeronym. Open the link to see it." ogImage="/og-pay.png" noindex bodyClass="pay-body">
+  <main id="main" class="pay">
+    <div class="z-container pay-wrap">
+      <section class="pay-card" data-pay aria-live="polite">
+        <p class="pay-k"><span class="pay-dot"></span>Payment request</p>
+        <h1 class="pay-amt" data-amt>Pay privately</h1>
+        <p class="pay-memo" data-memo hidden></p>
+        <dl class="pay-dl">
+          <div><dt>To</dt><dd class="pay-to" data-to>A shielded address</dd></div>
+          <div><dt>Token</dt><dd data-asset>USDG on Robinhood Chain</dd></div>
+          <div><dt>Fee</dt><dd>0.50 USDG relayer fee</dd></div>
+        </dl>
+        <p class="pay-bad" data-bad hidden>This link is missing a valid shielded address, so it can't be paid. Ask the person for a new link.</p>
+        <p class="pay-exp" data-exp hidden></p>
+        <a class="z-button z-button-primary pay-go" data-go href="/app/send/">Pay privately</a>
+        <p class="pay-small" data-hint>Opens the Zeronym app with this payment filled in. You review it before anything is sent.</p>
+      </section>
+
+      <section class="pay-side">
+        <h2>What the chain sees</h2>
+        <ul class="pay-list">
+          <li><b>A pool transaction.</b> Not who paid, who got paid, or how much. The amount and note are encrypted for the recipient.</li>
+          <li><b>New to Zeronym?</b> The app walks you through it: connect a wallet, make a privacy key, shield USDG (you can pay with ETH), then pay.</li>
+          <li><b>Tip:</b> paying right after shielding the exact same amount makes the two easier to link. Shield a round amount, or wait a while before you pay.</li>
+        </ul>
+        <p class="pay-safe">Only pay links from people you know, and check that the address bar says <b>zeronym.lat</b>. <a href="/security/">How to stay safe</a></p>
+      </section>
+    </div>
+  </main>
+  <script>
+    import { payLink } from '../scripts/pay';
+    payLink();
+  </script>
+</Base>

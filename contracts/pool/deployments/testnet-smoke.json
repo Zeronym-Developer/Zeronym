@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-10-23T09:48:14.365Z",
+  "pool": "0xd260bd358a610d70905bcaa2f61f185a16f99311",
+  "steps": [
+    {
+      "step": "approve",
+      "tx": "0x11b25230a5e11a1a2a8967792a4d39caf10bee59b229e6553aa56d099c5ab5bb",
+      "gasUsed": "46365"
+    },
+    {
+      "step": "shield 10 tUSD",
+      "tx": "0xcf347ccf15dcbb5cdc7b2c19502b38216f678e5874a1f19f7763427a06339bcf",
+      "gasUsed": "1175406"
+    },
+    {
+      "step": "private send 4 tUSD",
+      "tx": "0x89638527dd9d1835912ca48b8354ac02452ac4dd5c7b72072362b23b20428b99",
+      "gasUsed": "1107494"
+    },
+    {
+      "step": "withdraw 6 tUSD",
+      "tx": "0xb768a30fc138ba8c75dbe366342c170ae17da7361e088f8681f07122afebd951",
+      "gasUsed": "1125030"
+    }
+  ],
+  "result": "ok"
+}

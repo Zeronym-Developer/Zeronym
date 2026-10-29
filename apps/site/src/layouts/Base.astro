@@ -1,0 +1,130 @@
+---
+import '@fontsource/space-grotesk/500.css';
+import '@fontsource/space-grotesk/600.css';
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
+import '../styles/tokens.css';
+import '../styles/site.css';
+import deployments from '../data/deployments.json';
+
+interface Props { title: string; description: string; path: string; bodyClass?: string; ogImage?: string; noindex?: boolean }
+const { title, description, path, bodyClass, ogImage = '/og.jpg', noindex } = Astro.props;
+const isPreview = deployments.environment !== 'production';
+const fullTitle = path === '/' ? 'Zeronym · Private USDG payments on Robinhood Chain' : `${title} · Zeronym`;
+const nav = [
+  ['/how-it-works/', 'How it works'],
+  ['/docs/', 'Docs'],
+  ['/security/', 'Security'],
+];
+const token = deployments.records.find((r) => r.id === 'token') as { address?: string } | undefined;
+const ca = token?.address;
+const caShort = ca ? `${ca.slice(0, 6)}…${ca.slice(-4)}` : '';
+const socials = [
+  ['https://x.com/zeronym_app', 'Zeronym on X', 'M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z'],
+  ['https://t.me/Zeronym_pro', 'Zeronym on Telegram', 'M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z'],
+];
+const current = (href: string) => (path === href || path + '/' === href ? 'page' : href !== '/' && path.startsWith(href) ? 'true' : undefined);
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  {(isPreview || noindex) && <meta name="robots" content="noindex, nofollow" />}
+  <meta name="theme-color" content="#000000" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  {!Astro.url.pathname.startsWith('/404') && <link rel="canonical" href={new URL(Astro.url.pathname.endsWith('/') || /\.[a-z]+$/.test(Astro.url.pathname) ? Astro.url.pathname : Astro.url.pathname + '/', Astro.site).href} />}
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(ogImage, Astro.site).href} />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={fullTitle} />
+  <meta name="twitter:description" content={description} />
+</head>
+<body class={bodyClass}>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="z-container">
+      <a class="wordmark" href="/" aria-label="Zeronym home"><img class="wordmark-icon" src="/zeronym-icon.webp" width="190" height="120" alt="" /><span>ZERONYM</span></a>
+      <nav class="nav" id="site-nav" aria-label="Main">
+        {nav.map(([href, label]) => <a href={href} aria-current={current(href)}>{label}</a>)}
+        {ca && <button class="nav-ca nav-ca-menu" type="button" data-ca={ca} aria-label={`Copy the Zeronym token contract address ${ca}`}><span class="nav-ca-k">CA</span><span class="nav-ca-v">{ca}</span><span class="nav-ca-s" aria-live="polite">Copy</span></button>}
+        <div class="nav-soc-menu"><div class="soc-links">{socials.map(([href, label, d]) => <a class="soc-link" href={href} target="_blank" rel="noopener" aria-label={label} title={label}><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="currentColor" d={d} /></svg></a>)}</div></div>
+      </nav>
+      <div class="nav-end">
+        <div class="nav-soc-bar"><div class="soc-links">{socials.map(([href, label, d]) => <a class="soc-link" href={href} target="_blank" rel="noopener" aria-label={label} title={label}><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="currentColor" d={d} /></svg></a>)}</div></div>
+        {ca && <button class="nav-ca nav-ca-bar" type="button" data-ca={ca} title={`Zeronym token (Znym): ${ca}. Click to copy`} aria-label={`Copy the Zeronym token contract address ${ca}`}><span class="nav-ca-k">CA</span><span class="nav-ca-v">{caShort}</span><span class="nav-ca-s" aria-live="polite">Copy</span></button>}
+        <a class="z-button z-button-primary nav-launch" href="/app/">Launch App</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" id="nav-toggle">Menu</button>
+      </div>
+    </div>
+  </header>
+  <main id="main">
+    <slot />
+  </main>
+  <footer class="site-footer">
+    <div class="z-container">
+      <div class="footer-grid">
+        <div>
+          <a class="wordmark" href="/"><img class="wordmark-icon" src="/zeronym-icon.webp" width="190" height="120" alt="" /><span>ZERONYM</span></a>
+          <p style="margin-top:12px;max-width:44ch">A privacy protocol on Robinhood Chain: a shielded pool, private vaults and selective disclosure.</p>
+          <div class="footer-soc"><div class="soc-links">{socials.map(([href, label, d]) => <a class="soc-link" href={href} target="_blank" rel="noopener" aria-label={label} title={label}><svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path fill="currentColor" d={d} /></svg></a>)}</div></div>
+        </div>
+        <div>
+          <h4>Protocol</h4>
+          <ul>
+            <li><a href="/how-it-works/">How it works</a></li>
+            <li><a href="/docs/">Docs</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Trust</h4>
+          <ul>
+            <li><a href="/security/">Security</a></li>
+            <li><a href="/terms/">Terms of use</a></li>
+            <li><a href="/privacy/">Privacy policy</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script>
+    const t = document.getElementById('nav-toggle');
+    const n = document.getElementById('site-nav');
+    t?.addEventListener('click', () => {
+      const open = t.getAttribute('aria-expanded') !== 'true';
+      t.setAttribute('aria-expanded', String(open));
+      n?.classList.toggle('open', open);
+    });
+    // Copy the token contract address.
+    document.querySelectorAll<HTMLButtonElement>('.nav-ca').forEach((b) => b.addEventListener('click', async () => {
+      const s = b.querySelector('.nav-ca-s');
+      try { await navigator.clipboard.writeText(b.dataset.ca || ''); if (s) s.textContent = 'Copied'; }
+      catch { if (s) s.textContent = 'Copy failed'; }
+      setTimeout(() => { if (s) s.textContent = 'Copy'; }, 1600);
+    }));
+    // Hide the navbar while scrolling down, bring it back on scroll up.
+    const h = document.querySelector('.site-header');
+    let lastY = scrollY, ticking = false;
+    const update = () => {
+      ticking = false;
+      const y = scrollY, d = y - lastY;
+      if (Math.abs(d) < 6) return;
+      const menuOpen = n?.classList.contains('open');
+      const hide = d > 0 && y > 80 && !menuOpen;
+      h?.classList.toggle('hidden', hide);
+      document.documentElement.classList.toggle('nav-hidden', hide);
+      lastY = y;
+    };
+    addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    h?.addEventListener('focusin', () => { h.classList.remove('hidden'); document.documentElement.classList.remove('nav-hidden'); });
+  </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import { Content, getHeadings } from '../../content/whitepaper.md';
+---
+<DocsLayout slug="whitepaper" title="Whitepaper" description="The full protocol design, version 1.0." headings={getHeadings()}>
+  <blockquote><p><strong>Document status: version 1.0.</strong> It covers the full design, including modules that are coming soon. What is live today is on the <a href="/docs/project-status/">Project status</a> page, and every address is on <a href="/docs/contracts/">Network and contracts</a>. The rest of these docs explain the same design in plain words.</p></blockquote>
+  <Content />
+</DocsLayout>

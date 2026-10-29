@@ -1,0 +1,38 @@
+name: Site build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22', '24']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: apps/site/package-lock.json
+      - name: Install locked site dependencies
+        run: npm --prefix apps/site ci --no-audit --no-fund
+      - name: Check shipped prover files
+        run: node scripts/ci/check-prover.mjs
+      - name: Build the production site
+        run: npm --prefix apps/site run build
+        env:
+          ZERONYM_NETWORK: mainnet
+          SITE_URL: https://zeronym.lat

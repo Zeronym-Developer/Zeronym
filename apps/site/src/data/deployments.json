@@ -1,0 +1,170 @@
+{
+  "$comment": "Single source of truth for every chain, contract and status shown on the site. Change addresses only through a reviewed pull request.",
+  "network": "testnet",
+  "environment": "preview",
+  "protocolStatus": "design-draft",
+  "hostChain": {
+    "name": "Robinhood Chain",
+    "status": "planned",
+    "chainId": 46630,
+    "chainName": "Robinhood Chain Testnet",
+    "mainnetChainId": null,
+    "testnetChainId": 46630,
+    "explorer": "https://explorer.testnet.chain.robinhood.com",
+    "gasFaucet": "https://faucet.testnet.chain.robinhood.com"
+  },
+  "records": [
+    {
+      "id": "host-chain",
+      "label": "Host chain",
+      "value": "Robinhood Chain",
+      "status": "planned",
+      "section": "3"
+    },
+    {
+      "id": "token",
+      "label": "Token contract (testnet test token tZNYM)",
+      "address": "0x45fdb904eea7b0acbc3371208a6cbefbfc6a287a",
+      "chainId": 46630,
+      "status": "testnet",
+      "section": "14",
+      "explorer": "https://explorer.testnet.chain.robinhood.com/address/0x45fdb904eea7b0acbc3371208a6cbefbfc6a287a"
+    },
+    {
+      "id": "pool",
+      "label": "Shielded pool contract (testnet)",
+      "address": "0xd260bd358a610d70905bcaa2f61f185a16f99311",
+      "chainId": 46630,
+      "status": "testnet",
+      "section": "4",
+      "explorer": "https://explorer.testnet.chain.robinhood.com/address/0xd260bd358a610d70905bcaa2f61f185a16f99311"
+    },
+    {
+      "id": "verifier",
+      "label": "Verifier contract (testnet)",
+      "address": "0xbb313bf9e22d89f3a8e5cd85d8484ffd64c5289a",
+      "chainId": 46630,
+      "status": "testnet",
+      "section": "4",
+      "explorer": "https://explorer.testnet.chain.robinhood.com/address/0xbb313bf9e22d89f3a8e5cd85d8484ffd64c5289a"
+    },
+    {
+      "id": "assets",
+      "label": "Supported asset addresses (testnet: tUSD, tZNYM)",
+      "status": "testnet",
+      "section": "3"
+    },
+    {
+      "id": "source",
+      "label": "Source versions and proof-system documentation",
+      "status": "not-published",
+      "section": "16"
+    },
+    {
+      "id": "admin",
+      "label": "Admin powers (testnet: one admin wallet can pause deposits of a token; it cannot block withdrawals or move funds)",
+      "status": "testnet",
+      "section": "15"
+    },
+    {
+      "id": "fees",
+      "label": "Fee schedule and fee recipients",
+      "status": "not-published",
+      "section": "13"
+    },
+    {
+      "id": "services",
+      "label": "Relayer, indexer and remote-prover dependencies",
+      "status": "not-published",
+      "section": "12"
+    },
+    {
+      "id": "recovery",
+      "label": "Key backup, recovery and alternative withdrawal",
+      "status": "not-published",
+      "section": "5"
+    }
+  ],
+  "app": {
+    "$comment": "Assets the app may show (PRD R3.9). Only 'standard' tokens are allowed; rebasing, fee-on-transfer and callback tokens are excluded. 'demo' assets exist only in the browser until a pool contract is published. 'chainAssets' are used when a browser wallet is connected, against the testnet pool.",
+    "mode": "demo-or-testnet",
+    "rpc": "https://rpc.testnet.chain.robinhood.com",
+    "assets": [
+      {
+        "symbol": "USDG",
+        "name": "Global Dollar",
+        "decimals": 2,
+        "kind": "demo",
+        "behaviour": "standard",
+        "demoBalance": "10000",
+        "step": "0.01",
+        "fee": {
+          "relayer": "0.50"
+        }
+      },
+      {
+        "symbol": "ETH",
+        "name": "Ether",
+        "decimals": 6,
+        "kind": "demo",
+        "behaviour": "standard",
+        "demoBalance": "4",
+        "step": "0.000001",
+        "fee": {
+          "relayer": "0.0002"
+        }
+      }
+    ],
+    "networkFeeEth": "0.00002",
+    "chainAssets": [
+      {
+        "symbol": "USDG",
+        "name": "Global Dollar (testnet)",
+        "decimals": 6,
+        "kind": "testnet",
+        "behaviour": "standard",
+        "demoBalance": "0",
+        "step": "0.01",
+        "fee": {
+          "relayer": "0.10"
+        },
+        "address": "0x7e955252e15c84f5768b83c41a71f9eba181802f",
+        "faucet": false,
+        "faucetUrl": "https://faucet.paxos.com/",
+        "issuer": "Paxos",
+        "maxDeposit": "10000000000"
+      },
+      {
+        "symbol": "tZNYM",
+        "name": "Zeronym test token",
+        "decimals": 18,
+        "kind": "testnet",
+        "behaviour": "standard",
+        "demoBalance": "0",
+        "step": "0.0001",
+        "fee": {
+          "relayer": "1"
+        },
+        "address": "0x45fdb904eea7b0acbc3371208a6cbefbfc6a287a",
+        "faucet": false,
+        "maxDeposit": "1000000000000000000000000"
+      },
+      {
+        "symbol": "tUSD",
+        "name": "Test dollar (retired)",
+        "decimals": 6,
+        "kind": "testnet",
+        "behaviour": "standard",
+        "demoBalance": "0",
+        "step": "0.01",
+        "fee": {
+          "relayer": "0.10"
+        },
+        "address": "0x1b0f22cca70bf5022dc577718f6a03223aaeb672",
+        "faucet": false,
+        "maxDeposit": "10000000000",
+        "retired": true
+      }
+    ]
+  }
+}

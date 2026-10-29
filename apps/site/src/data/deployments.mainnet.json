@@ -1,0 +1,170 @@
+{
+  "$comment": "Mainnet deployment record (Robinhood Chain, chain ID 4663). Used when the site is built with ZERONYM_NETWORK=mainnet. Change addresses only through a reviewed change, after checking them on the explorer.",
+  "network": "mainnet",
+  "environment": "production",
+  "protocolStatus": "mainnet",
+  "hostChain": {
+    "name": "Robinhood Chain",
+    "status": "mainnet",
+    "chainId": 4663,
+    "chainName": "Robinhood Chain",
+    "mainnetChainId": 4663,
+    "testnetChainId": null,
+    "explorer": "https://robinhoodchain.blockscout.com",
+    "bridges": [
+      {
+        "name": "Relay",
+        "url": "https://relay.link/bridge/robinhood",
+        "note": "Seconds, from most chains"
+      },
+      {
+        "name": "Across",
+        "url": "https://across.to/?to=robinhood",
+        "note": "Seconds, from most chains"
+      },
+      {
+        "name": "Arbitrum bridge",
+        "url": "https://portal.arbitrum.io/bridge?destinationChain=robinhood-chain&sourceChain=ethereum",
+        "note": "The official route from Ethereum, about 10 minutes"
+      }
+    ],
+    "bridgeDocs": "https://docs.robinhood.com/chain/bridging/"
+  },
+  "records": [
+    {
+      "id": "host-chain",
+      "label": "Host chain",
+      "value": "Robinhood Chain",
+      "status": "mainnet",
+      "section": "3"
+    },
+    {
+      "id": "token",
+      "label": "Zeronym token (Znym)",
+      "status": "mainnet",
+      "section": "14",
+      "address": "0x157ba872a92c2f147c3ea73dabf56daa9ef8fc67",
+      "chainId": 4663,
+      "explorer": "https://robinhoodchain.blockscout.com/token/0x157ba872a92c2f147c3ea73dabf56daa9ef8fc67"
+    },
+    {
+      "id": "pool",
+      "label": "Shielded pool contract (mainnet)",
+      "status": "mainnet",
+      "section": "4",
+      "address": "0x84c21f20959f0d00892007f2a7cfe46d19077877",
+      "chainId": 4663,
+      "explorer": "https://robinhoodchain.blockscout.com/address/0x84c21f20959f0d00892007f2a7cfe46d19077877"
+    },
+    {
+      "id": "verifier",
+      "label": "Verifier contract (mainnet)",
+      "status": "mainnet",
+      "section": "4",
+      "address": "0xa1cb0bf67c66749bd6075ead69fb1ede77757101",
+      "chainId": 4663,
+      "explorer": "https://robinhoodchain.blockscout.com/address/0xa1cb0bf67c66749bd6075ead69fb1ede77757101"
+    },
+    {
+      "id": "assets",
+      "label": "Supported asset addresses (mainnet: USDG)",
+      "status": "mainnet",
+      "section": "3"
+    },
+    {
+      "id": "source",
+      "label": "Proof system and contract documentation (see Architecture)",
+      "status": "mainnet",
+      "section": "16"
+    },
+    {
+      "id": "admin",
+      "label": "Admin powers (a multisig can pause deposits of a token; it cannot block withdrawals or move funds)",
+      "status": "mainnet",
+      "section": "15"
+    },
+    {
+      "id": "fees",
+      "label": "Fee schedule: no protocol fee; the Zeronym relayer charges 0.50 USDG per private action it submits",
+      "status": "mainnet",
+      "section": "13"
+    },
+    {
+      "id": "services",
+      "label": "Services: one Zeronym relayer; proofs are built in the browser; no indexer (the app reads the chain)",
+      "status": "mainnet",
+      "section": "12"
+    },
+    {
+      "id": "recovery",
+      "label": "Key backup, recovery and alternative withdrawal",
+      "status": "not-published",
+      "section": "5"
+    }
+  ],
+  "app": {
+    "$comment": "Assets the app may show (PRD R3.9). Only 'standard' tokens are allowed; rebasing, fee-on-transfer and callback tokens are excluded. 'demo' assets exist only in the browser until a pool contract is published. 'chainAssets' are used when a browser wallet is connected, against the mainnet pool.",
+    "mode": "demo-or-mainnet",
+    "rpc": "https://rpc.mainnet.chain.robinhood.com",
+    "assets": [
+      {
+        "symbol": "USDG",
+        "name": "Global Dollar",
+        "decimals": 2,
+        "kind": "demo",
+        "behaviour": "standard",
+        "demoBalance": "10000",
+        "step": "0.01",
+        "fee": {
+          "relayer": "0.50"
+        }
+      },
+      {
+        "symbol": "ETH",
+        "name": "Ether",
+        "decimals": 6,
+        "kind": "demo",
+        "behaviour": "standard",
+        "demoBalance": "4",
+        "step": "0.000001",
+        "fee": {
+          "relayer": "0.0002"
+        }
+      }
+    ],
+    "networkFeeEth": "0.00002",
+    "chainAssets": [
+      {
+        "symbol": "USDG",
+        "name": "Global Dollar",
+        "decimals": 6,
+        "kind": "mainnet",
+        "behaviour": "standard",
+        "demoBalance": "0",
+        "step": "0.01",
+        "fee": {
+          "relayer": "0.50"
+        },
+        "address": "0x5fc5360d0400a0fd4f2af552add042d716f1d168",
+        "faucet": false,
+        "issuer": "Paxos"
+      }
+    ],
+    "swap": {
+      "dex": "Uniswap",
+      "note": "Pay with ETH: exact-output swap of ETH for a round token amount, then a normal deposit. Uniswap v3 on Robinhood Chain (docs.uniswap.org/contracts/v3/reference/deployments).",
+      "router": "0xcaf681a66d020601342297493863e78c959e5cb2",
+      "quoter": "0x33e885ed0ec9bf04ecfb19341582aadcb4c8a9e7",
+      "weth": "0x0Bd7D308f8E1639FAb988df18A8011f41EAcAD73",
+      "fees": [
+        100,
+        500
+      ],
+      "slippageBps": 50,
+      "gasReserveEth": "0.0002",
+      "tokens": [
+        "USDG"
+      ]
+    }
+  }
+}

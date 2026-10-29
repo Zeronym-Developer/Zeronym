@@ -1,0 +1,27 @@
+name: Deployment records
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  records:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check mainnet records and public verifier references
+        run: node apps/site/scripts/check-deployments.mjs
+        env:
+          ZERONYM_NETWORK: mainnet

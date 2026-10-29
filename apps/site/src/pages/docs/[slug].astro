@@ -1,0 +1,13 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+export async function getStaticPaths() {
+  const pages = import.meta.glob('../../docs/*.md', { eager: true }) as Record<string, any>;
+  return Object.entries(pages).map(([p, m]) => ({ params: { slug: p.split('/').pop()!.replace(/\.md$/, '') }, props: { m } }));
+}
+const { m } = Astro.props as { m: any };
+const { slug } = Astro.params;
+const { Content } = m;
+---
+<DocsLayout slug={slug!} title={m.frontmatter.title} description={m.frontmatter.description} status={m.frontmatter.status} headings={m.getHeadings()}>
+  <Content />
+</DocsLayout>

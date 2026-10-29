@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import CtaSection from '../components/CtaSection.astro';
+import '../styles/sections.css';
+import '../styles/pages.css';
+---
+<Base title="Page not found" path="/404" description="This page does not exist.">
+  <div class="nf">
+    <CtaSection n="" kicker="Error 404" h1 title="This page does not exist." em="Or it moved." body="Check the address, or start again from the homepage. If someone sent you here for a token or contract, only trust the Network and contracts page in the docs." primary={['/', 'Go to the homepage']} secondary={['/docs/contracts/', 'Network and contracts']} word="404" />
+  </div>
+  <script>
+    import '../scripts/sections';
+  </script>
+</Base>

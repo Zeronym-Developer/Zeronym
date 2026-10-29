@@ -1,0 +1,27 @@
+name: Client cryptography
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  crypto:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install locked protocol dependencies
+        run: node scripts/ci/install-pool.mjs
+      - name: Test addresses, encryption, membership and note scanning
+        run: node --test scripts/ci/client.test.mjs

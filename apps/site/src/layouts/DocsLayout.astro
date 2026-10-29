@@ -1,0 +1,85 @@
+---
+import Base from './Base.astro';
+import '../styles/docs.css';
+import Status from '../components/Status.astro';
+import { docsNav, flat, href } from '../data/docs-nav';
+
+interface Props { slug: string; title: string; description: string; headings?: { depth: number; slug: string; text: string }[]; status?: string; wide?: boolean }
+const { slug, title, description, headings = [], status, wide } = Astro.props;
+const i = flat.findIndex((p) => p.slug === slug);
+const page = flat[i];
+const prev = flat[i - 1];
+const next = flat[i + 1];
+const toc = headings.filter((h) => h.depth === 2);
+
+// Search index: every page, plus its section headings.
+const pages = import.meta.glob('../docs/*.md', { eager: true }) as Record<string, any>;
+const bySlug: Record<string, any> = {};
+for (const [p, m] of Object.entries(pages)) bySlug[p.split('/').pop()!.replace(/\.md$/, '')] = m;
+const index = flat.map((p) => {
+  const m = bySlug[p.slug];
+  return {
+    t: p.title, g: p.group, u: href(p.slug),
+    d: m?.frontmatter.description ?? (p.slug === '' ? 'What Zeronym is, the key facts, and where to start.' : p.slug === 'whitepaper' ? 'The full protocol design, version 1.0.' : ''),
+    h: (m?.getHeadings?.() ?? []).filter((h: any) => h.depth === 2).map((h: any) => [h.text, h.slug]),
+  };
+});
+---
+<Base title={slug ? title : 'Docs'} path={href(slug)} description={description} bodyClass="docs-page">
+  <div class="z-container docs">
+    <aside class="docs-side" id="docs-side">
+      <button class="docs-search-btn" type="button" data-search-open><span>Search</span><kbd>Ctrl K</kbd></button>
+      <nav aria-label="Docs" class="docs-nav">
+        {docsNav.map((g) => (
+          <div class="docs-group">
+            <p class="docs-group-t">{g.group}</p>
+            <ul>
+              {g.items.map((it) => <li><a href={href(it.slug)} aria-current={it.slug === slug ? 'page' : undefined}>{it.title}</a></li>)}
+            </ul>
+          </div>
+        ))}
+      </nav>
+    </aside>
+
+    <div class="docs-bar">
+      <button class="docs-menu-btn" type="button" aria-controls="docs-side" aria-expanded="false" data-docs-menu><span>Docs</span><span aria-hidden="true">/</span><b>{page.title}</b><i aria-hidden="true">▾</i></button>
+      <button class="docs-search-btn sm" type="button" data-search-open aria-label="Search the docs"><span>Search</span></button>
+    </div>
+
+    <article class:list={['docs-main', { wide }]}>
+      <nav aria-label="Breadcrumb" class="docs-crumbs">
+        <ol>
+          <li><a href="/docs/">Docs</a></li>
+          {slug && <><li aria-hidden="true">/</li><li>{page.group}</li><li aria-hidden="true">/</li><li aria-current="page">{page.title}</li></>}
+        </ol>
+      </nav>
+      <h1>{title}</h1>
+      {description && <p class="docs-lede">{description}</p>}
+      {status && <div class="docs-status"><Status status={status === 'candidate' ? 'candidate' : 'design-draft'} /><span>{status === 'candidate' ? 'Coming soon. This module is in progress and will get its own contracts and review before it goes live.' : 'Describes the intended design. Not deployed yet.'}</span></div>}
+      <div class="docs-body"><slot /></div>
+      <nav aria-label="Previous and next page" class="docs-pager">
+        {prev ? <a class="prev" href={href(prev.slug)} rel="prev"><span>Previous</span><b>{prev.title}</b></a> : <span></span>}
+        {next ? <a class="next" href={href(next.slug)} rel="next"><span>Next</span><b>{next.title}</b></a> : <span></span>}
+      </nav>
+    </article>
+
+    <aside class="docs-toc">
+      {toc.length > 0 && (
+        <nav aria-label="On this page">
+          <p class="docs-group-t">On this page</p>
+          <ul>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ul>
+          <a class="docs-top" href="#main">Back to top</a>
+        </nav>
+      )}
+    </aside>
+  </div>
+
+  <dialog class="docs-search" id="docs-search" aria-label="Search the docs" data-index={JSON.stringify(index)}>
+    <div class="docs-search-in">
+      <input type="search" id="docs-q" placeholder="Search for shield, viewing key, fees…" autocomplete="off" aria-label="Search the docs" aria-controls="docs-hits" />
+      <button type="button" data-search-close>Esc</button>
+    </div>
+    <ul id="docs-hits" class="docs-hits" role="listbox" aria-label="Results"></ul>
+  </dialog>
+  <script>import '../scripts/docs';</script>
+</Base>

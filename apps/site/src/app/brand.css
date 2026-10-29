@@ -1,0 +1,197 @@
+/* Zeronym app, brand layer. Loads after app.css and brings the app back to the
+   marketing site's language: pure black ground, site surfaces and borders,
+   rectangular buttons, Space Grotesk titles, mono kickers and labels, mono
+   figures, the public dot and private square, blueprint figure panels and the
+   spotlight card edge. Everything here is visual; no layout logic lives here. */
+
+/* ---------- Tokens: the site's values ---------- */
+.app-body { background: #000; }
+.ashell {
+  --d-bg: #000; --d-side: #000; --d-card: #0C0B11; --d-tile: #15121C; --d-tile-2: #1C1824;
+  --d-line: #2B2635; --d-line-2: #3A3446; --d-hover: rgba(255, 255, 255, .04);
+  --d-acc: #8B3DFF; --d-acc-h: #7930E8; --d-acc-soft: rgba(139, 61, 255, .14); --d-acc-text: #B999FF;
+  --d-r: 20px; --d-r-md: 14px; --d-r-sm: 10px;
+  --b-chrome: linear-gradient(100deg, #FFFFFF 0%, #E9E6F0 30%, #C8C5D0 60%, #8E879C 100%);
+  --b-grid: linear-gradient(rgba(185, 153, 255, .06) 1px, transparent 1px), linear-gradient(90deg, rgba(185, 153, 255, .06) 1px, transparent 1px);
+}
+
+/* Public dot and private square, the two marks used across the site */
+.sym-pub, .sym-shd { display: inline-block; width: 9px; height: 9px; flex: none; }
+.sym-pub { border-radius: 50%; background: var(--z-platinum); }
+.sym-shd { border-radius: 2px; box-shadow: inset 0 0 0 1.5px var(--z-link); }
+
+/* ---------- Spotlight edge on cards ---------- */
+.ashell .dp, .ashell .ov5-tile, .ashell .ov5-step, .ashell .acard, .ashell .dstrip { position: relative; isolation: isolate; }
+.ashell .dp::after, .ashell .ov5-tile::after, .ashell .ov5-step::after, .ashell .acard::before, .ashell .dstrip::after {
+  content: ""; display: block; position: absolute; inset: -1px; z-index: 2; border-radius: inherit; padding: 1px; pointer-events: none; opacity: 0; transition: opacity 220ms var(--z-ease);
+  background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 0%), rgba(185, 153, 255, .7), transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+.ashell .dp::before, .ashell .ov5-tile::before, .ashell .dstrip::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 220ms var(--z-ease);
+  background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 0%), rgba(139, 61, 255, .07), transparent 60%); }
+.ashell .dp:hover::after, .ashell .ov5-tile:hover::after, .ashell .ov5-step:hover::after, .ashell .acard:hover::before, .ashell .dstrip:hover::after,
+.ashell .dp:hover::before, .ashell .ov5-tile:hover::before, .ashell .dstrip:hover::before { opacity: 1; }
+.ashell .dp .dp::after, .ashell .dp .dp::before { display: none; }
+.ashell .ov5-step.done::after { display: none; }
+@media (hover: none) { .ashell .dp::after, .ashell .dp::before, .ashell .ov5-tile::after, .ashell .ov5-tile::before, .ashell .ov5-step::after, .ashell .acard::before, .ashell .dstrip::after, .ashell .dstrip::before { display: none; } }
+
+/* ---------- Surfaces ---------- */
+.ashell .dp, .ashell .ds, .ashell .dstrip, .ashell .acard { background: var(--z-surface); border-color: var(--z-border); }
+.ashell .acard { background: var(--z-surface); }
+.ashell .amodal { background: var(--z-surface); border-color: var(--z-border-control); border-radius: var(--z-radius-dialog); }
+.ashell .anote { border-radius: 12px; background: rgba(255, 255, 255, .015); }
+
+/* ---------- Buttons: the site's rectangles ---------- */
+.ashell .ab { border-radius: var(--z-radius-control); font-weight: 500; }
+.ashell .ab-sm { border-radius: 8px; }
+.ashell .ab-lg { border-radius: 12px; font-weight: 500; }
+.ashell .ab-primary { background: var(--z-accent); color: #fff; }
+.ashell .ab-primary:hover:not(:disabled) { background: var(--z-accent-hover); }
+.ashell .ab-secondary { background: var(--z-surface-raised); border-color: var(--z-border-control); color: var(--z-text); }
+.ashell .ab-secondary:hover:not(:disabled) { background: var(--z-surface-raised); border-color: var(--z-platinum); }
+.ashell .ab-ghost { color: var(--z-text-secondary); }
+.aside-mini { border-color: var(--z-border); background: #000; }
+.aside-mini:hover { border-color: var(--z-border-control); }
+
+/* Segmented controls: the site's figure toggle (pill track, raised pill) */
+.ashell .aseg { border-color: var(--z-border); background: rgba(12, 11, 17, .9); }
+.ashell .aseg button { font-weight: 500; }
+.ashell .aseg button.on { background: var(--z-border); color: var(--z-text); }
+.ashell .atabs { border-color: var(--z-border); background: rgba(12, 11, 17, .9); }
+.ashell .atabs-ind { background: var(--z-border); }
+
+/* Inputs and pickers */
+.ashell .z-input, .ashell .aamount { background: var(--z-surface-raised); border-color: var(--z-border-control); }
+.ashell .z-input:focus { border-color: var(--z-link); box-shadow: 0 0 0 3px rgba(139, 61, 255, .2); }
+.ashell .dsearch, .tsearch-box { border-radius: var(--z-radius-control); border-color: var(--z-border); background: var(--z-surface); }
+.ashell .dsearch:focus-within, .tsearch-box:focus-within { border-color: var(--z-border-control); }
+.ashell .dpill { border-radius: var(--z-radius-control); border-color: var(--z-border-control); background: var(--z-surface-raised); }
+.ashell .dpill:hover { border-color: var(--z-platinum); }
+.vdd-btn { border-radius: var(--z-radius-control) !important; border-color: var(--z-border-control) !important; background: var(--z-surface-raised) !important; }
+.vdd-btn:hover, .vdd.open .vdd-btn { border-color: var(--z-platinum) !important; }
+
+/* ---------- Chrome: sidebar and top bar ---------- */
+.ashell .aside { background: #000; border-right-color: var(--z-border); }
+.ashell .aside-brand { font: 600 15px/1 var(--z-font-display); letter-spacing: .16em; }
+.ashell .anav-a { font-weight: 500; }
+.ashell .anav-a.on { background: rgba(139, 61, 255, .12); box-shadow: inset 0 0 0 1px rgba(185, 153, 255, .22); }
+.ashell .anav-a.on .ic { color: var(--z-link); }
+.ashell .anav-badge { font-family: var(--z-font-mono); }
+.ashell .aside-bot { border-top-color: var(--z-border); }
+.aside-st { font: 400 12px/1 var(--z-font-mono); }
+.ashell .atop { background: rgba(0, 0, 0, .6); -webkit-backdrop-filter: blur(16px) saturate(140%); backdrop-filter: blur(16px) saturate(140%); border-bottom: 1px solid var(--z-border); }
+/* Network chip: the site's live pill */
+.ashell .anet { border-color: var(--z-border-control); background: rgba(0, 0, 0, .55); font: 500 13px/1.2 var(--z-font-body); }
+.ashell .anet .achip-dot { background: var(--z-success); box-shadow: 0 0 8px rgba(80, 213, 160, .8); }
+.ashell .awallet { border-color: var(--z-border-control); border-radius: var(--z-radius-control); font-family: var(--z-font-mono); }
+.ashell .awallet .awallet-img, .ashell .awallet .ablockie { border-radius: 6px !important; }
+.ashell .atop-connect { border-radius: var(--z-radius-control); }
+.awm2-menu, .tsearch-list { background: var(--z-surface); border-color: var(--z-border-control); }
+.ts-ic { border-radius: 8px; background: var(--z-surface-raised); }
+
+/* ---------- Page header: mono kicker, chrome title ---------- */
+.akick, .ashell .ahead .akick { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 12px; font: 500 12px/1.4 var(--z-font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--z-link); }
+.akick::before { content: ""; width: 8px; height: 8px; border-radius: 2px; box-shadow: inset 0 0 0 1.5px currentColor; flex: none; }
+.akick > span { color: var(--z-text-muted); margin-right: 2px; }
+.akick > span::after { content: " /"; }
+.ashell .ahead { padding-top: 30px; }
+.ashell .ahead h1 { font: 600 clamp(30px, 3.1vw, 42px)/1.05 var(--z-font-display); letter-spacing: -.035em; margin-left: -.02em; background: var(--b-chrome); -webkit-background-clip: text; background-clip: text; color: transparent; width: fit-content; padding-bottom: .06em; }
+.ashell .ahead p:not(.akick) { margin-top: 10px; font-size: 15.5px; line-height: 1.55; color: var(--z-text-secondary); max-width: 62ch; }
+
+/* ---------- Panel titles and labels ---------- */
+.ashell .dp-h h2 { font: 600 19px/1.25 var(--z-font-display); letter-spacing: -.015em; }
+.ashell .dp-h h2 .ic { color: var(--z-link); }
+.ashell .dp-h p { font-size: 14px; line-height: 1.5; color: var(--z-text-muted); }
+.ashell .akicker { font: 500 11.5px/1.4 var(--z-font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--z-link); }
+.ashell .akicker .ic { color: var(--z-link); }
+/* Stat strips: mono caption, display figure */
+.dstrip > div > span { font: 500 11px/1.4 var(--z-font-mono) !important; letter-spacing: .12em; text-transform: uppercase; color: var(--z-text-muted) !important; }
+.dstrip > div > b { font-family: var(--z-font-display); }
+.dstrip .in > b { color: var(--z-text); }
+.dstrip.facts > div > span { text-transform: none; letter-spacing: 0; font: 600 14.5px/1.4 var(--z-font-body) !important; color: var(--z-text) !important; }
+.ds-l { font: 500 11px/1.4 var(--z-font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--z-text-muted); }
+.ds-ic, .ds-in .ds-ic, .ds-out .ds-ic, .ds-net .ds-ic { border-radius: 8px; background: var(--z-surface-raised); color: var(--z-text-secondary); }
+.ashell .apane-l, .ashell .apane .avsel-l { font: 500 11px/1.4 var(--z-font-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--z-text-muted); }
+
+/* Chips and statuses: mono, as on the site */
+.ashell .achip, .ashell .astatus { font: 400 12px/1 var(--z-font-mono); }
+.ashell .astatus-sym { font-family: var(--z-font-body); }
+
+/* ---------- Money: display figures, mono in rows ---------- */
+.ashell .amoney.big { font-family: var(--z-font-display); }
+.ashell .amoney small { font-family: var(--z-font-mono); font-size: .72em; letter-spacing: .02em; }
+.ashell .amoney.big small { font: 400 13px/1 var(--z-font-mono); }
+.ov5-tile-v .amoney small { font: 400 14px/1 var(--z-font-mono) !important; }
+
+/* ---------- Tables: open-ledger records ---------- */
+.dt-head, .vtab-head, .atok-head, .rtab-head { font: 500 11px/1.4 var(--z-font-mono) !important; letter-spacing: .1em !important; text-transform: uppercase; color: var(--z-text-muted) !important; background: rgba(255, 255, 255, .012); }
+.dt-day { font: 500 11px/1.4 var(--z-font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--z-text-muted); background: transparent; }
+.dt-day-t { font: 400 12px/1.4 var(--z-font-mono); letter-spacing: 0; text-transform: none; color: var(--z-text-secondary); }
+.dt-time { font: 400 12.5px/1 var(--z-font-mono); color: var(--z-text-muted); }
+.dt-tx b { font-weight: 500; }
+.dt-amt b { font: 500 14px/1.2 var(--z-font-mono); }
+.dt-amt b .amoney small { font-size: .92em; color: var(--z-text-muted); }
+.dt-amt.in b { color: var(--z-text); }
+.dt-amt small { font-family: var(--z-font-mono); }
+.dt-st { font-size: 13.5px; }
+/* Row marks: square tiles, platinum for public edges, violet for pool-only */
+.dt-ic, .dir-in .dt-ic, .dir-out .dt-ic { border-radius: 10px; background: var(--z-surface-raised); color: var(--z-platinum); box-shadow: inset 0 0 0 1px var(--z-border); }
+.is-hid .dt-ic, .dir-out.is-hid .dt-ic, .dir-in.is-hid .dt-ic { background: rgba(139, 61, 255, .1); color: var(--z-link); box-shadow: inset 0 0 0 1px rgba(185, 153, 255, .3); }
+/* Visibility: the site's "public" / "hidden" record chip */
+.dt-vis em { display: inline-flex; align-items: center; gap: 7px; height: 24px; padding: 0 10px; border-radius: 999px; border: 1px solid var(--z-border); font: 400 11.5px/1 var(--z-font-mono); font-style: normal; color: var(--z-text-secondary); }
+.dt-vis em::before { content: ""; width: 7px; height: 7px; flex: none; border-radius: 50%; background: var(--z-platinum); }
+.dt-vis em.shd { color: var(--z-link); border-color: rgba(185, 153, 255, .35); }
+.dt-vis em.shd::before { border-radius: 1.5px; background: none; box-shadow: inset 0 0 0 1.5px var(--z-link); }
+.atok-amt b, .vtab-amt, .dsplit-v { font-family: var(--z-font-mono); font-weight: 500; }
+
+/* ---------- Overview ---------- */
+.ashell .ov5-tile { background: var(--z-surface); border-color: var(--z-border); }
+.ov5-tile-h b { font: 600 17px/1.2 var(--z-font-display); }
+.ov5-step-h small { font: 500 11px/1 var(--z-font-mono); letter-spacing: .14em; text-transform: uppercase; }
+.ov5-step b { font: 600 17px/1.25 var(--z-font-display); letter-spacing: -.01em; }
+.ov5-step-ic, .ov5-step.done .ov5-step-ic { border-radius: 10px; }
+.ov5-step.done { background: transparent; border-color: var(--z-border); }
+.ov5-step.done .ov5-step-ic { background: rgba(80, 213, 160, .08); }
+.ov5-where { border-radius: 999px; border-color: var(--z-border); font: 400 12px/1 var(--z-font-mono); }
+.ov5-where b { font-weight: 500; }
+.ov6-edges > div { background: rgba(0, 0, 0, .35); }
+.ov6-edges span { display: inline-flex; align-items: center; gap: 8px; font: 500 11px/1.4 var(--z-font-mono); letter-spacing: .12em; text-transform: uppercase; }
+.ov6-edges .priv span { color: var(--z-link); }
+.ov6-edges .priv { background: radial-gradient(90% 90% at 80% 20%, rgba(139, 61, 255, .12), transparent 70%); }
+.ov6-row-ic { border-radius: 10px; }
+.ov6-svc, .afoot { font-family: var(--z-font-mono); font-size: 12.5px; }
+.ov6-svc b { font-weight: 500; }
+.ov6-svc .alink, .afoot a { font-family: var(--z-font-body); }
+
+/* Privacy check: the site's mono header */
+.ashell .afind { border-color: var(--z-border); border-radius: 14px; }
+.ashell .afind header b { font: 500 11.5px/1.4 var(--z-font-mono); letter-spacing: .1em; text-transform: uppercase; }
+.ashell .afind-meter em { font-family: var(--z-font-mono); }
+.ashell .afind-foot { font-family: var(--z-font-mono); font-size: 11.5px; }
+
+/* ---------- Figure panels: blueprint grid with a block-explorer window ---------- */
+.aprev-fig { position: relative; display: grid; place-items: center; padding: 28px 18px; margin: 0 -18px; border-block: 1px solid var(--z-border);
+  background-color: #07060B; background-image: var(--b-grid); background-size: 24px 24px; background-position: center; }
+.aprev-fig::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 50% 45%, transparent 50%, #07060B 100%); }
+.aprev-win { position: relative; z-index: 1; display: grid; width: 100%; border-radius: 12px; border: 1px solid var(--z-border); background: rgba(12, 11, 17, .94); box-shadow: 0 18px 40px rgba(0, 0, 0, .5); overflow: hidden; }
+.aprev-bar { display: flex; align-items: center; gap: 5px; padding: 9px 12px; border-bottom: 1px solid var(--z-border); }
+.aprev-bar > i { width: 7px; height: 7px; border-radius: 50%; background: var(--z-border); }
+.aprev-bar b { margin-left: 6px; font: 500 10.5px/1 var(--z-font-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--z-text-muted); }
+.aprev-bar .aprev-st { margin-left: auto; }
+.ashell .aprev-tx { border: 0; border-bottom: 1px solid var(--z-border); border-radius: 0; background: none; padding: 9px 14px; }
+.ashell .aprev-dl { font: 400 12.5px/1.3 var(--z-font-mono); }
+.ashell .aprev-dl div { padding: 8px 14px; min-height: 38px; border-top-color: rgba(43, 38, 53, .7); }
+.ashell .aprev-dl dt { color: var(--z-text-muted); }
+.ashell .aprev-lock { border-radius: 6px; border-color: rgba(185, 153, 255, .35); background: rgba(139, 61, 255, .08); }
+.ashell .aprev-foot { font-size: 13px; }
+
+/* Asset glyphs keep their colour but lose the glossy bevel */
+.ashell .aglyph { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .16); }
+.ashell .aglyph-img { box-shadow: 0 0 0 1px rgba(255, 255, 255, .12); }
+
+@media (max-width: 760px) {
+  .ashell .ahead { padding-top: 20px; }
+  .ashell .ahead h1 { font-size: 30px; }
+  .ashell .ahead .akick { margin-bottom: 8px; font-size: 11px; }
+  .aprev-fig { margin: 0 -16px; padding: 20px 12px; }
+}

@@ -1,0 +1,31 @@
+name: Pool integration
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  transactions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install locked protocol dependencies
+        run: node scripts/ci/install-pool.mjs
+      - name: Compile contracts
+        run: npm --prefix contracts/pool run compile
+      - name: Prepare the recorded mainnet prover files
+        run: node scripts/ci/prepare-prover.mjs
+      - name: Test shield, private send, withdrawal and rejection cases
+        run: npm --prefix contracts/pool test

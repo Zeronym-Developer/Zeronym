@@ -1,0 +1,68 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import { docsNav, href } from '../../data/docs-nav';
+import deployments from '../../data/deployments.json';
+const pages = import.meta.glob('../../docs/*.md', { eager: true }) as Record<string, any>;
+const desc: Record<string, string> = { whitepaper: 'The full protocol design, version 1.0.' };
+for (const [p, m] of Object.entries(pages)) desc[p.split('/').pop()!.replace(/\.md$/, '')] = m.frontmatter.description;
+const pool = deployments.records.find((r) => r.id === 'pool')!;
+const facts = [
+  ['Status', 'Pool live', 'USDG on Robinhood Chain mainnet'],
+  ['Host chain', 'Robinhood Chain', `Mainnet chain ID ${deployments.hostChain.chainId}`],
+  ['Admin', '2-of-3 Safe', 'Can only turn deposits of a token on or off. Can’t replace the verifier, block withdrawals or upgrade the pool'],
+  ['Keys', 'Yours', 'Spending authority never leaves you'],
+  ['Deposits and withdrawals', 'Public', 'Visible on the host chain'],
+  ['Token', 'Znym, live', '0x157b…fc67 on Robinhood Chain. The pool does not need it'],
+];
+const steps = [
+  ['Shield', 'Public', 'Deposit a supported token. It becomes an encrypted note only your keys can read.', 'shield'],
+  ['Organize', 'Private', 'Sort shielded balances into vaults. Names stay on your device.', 'vaults'],
+  ['Send', 'Private', 'Pay another shielded account. The chain does not show who paid whom, or how much.', 'send'],
+  ['Withdraw', 'Public', 'Release tokens to any address. The destination, token and amount are public.', 'withdraw'],
+];
+const start = [
+  ['project-status', 'Project status', 'What exists today, and how to check it.'],
+  ['key-ideas', 'Key ideas', 'Pools, notes and proofs without the maths.'],
+  ['privacy', 'What stays private', 'What others can and cannot see.'],
+  ['faq', 'FAQ', 'Short answers to common questions.'],
+];
+---
+<DocsLayout slug="" title="How Zeronym works, in plain words." description="" headings={[{ depth: 2, slug: 'start', text: 'Start here' }, { depth: 2, slug: 'facts', text: 'Key facts' }, { depth: 2, slug: 'lifecycle', text: 'Start to finish' }, { depth: 2, slug: 'browse', text: 'All docs' }]}>
+  <p class="docs-intro">Zeronym is a shielded pool for USDG on Robinhood Chain. You shield USDG into a shared pool, organize it into vaults, send them without the chain showing who paid whom, and share only the records you choose. These docs explain how it works, what stays public, and what is coming soon.</p>
+  <blockquote><p><strong>The shielded pool is live.</strong> It runs on Robinhood Chain mainnet for USDG. Only deposit what you can afford to lose. Shared treasuries and swaps inside the pool are coming soon.</p></blockquote>
+
+  <h2 id="start">Start here</h2>
+  <div class="docs-cards">
+    {start.map(([s, t, d]) => <a class="docs-card" href={href(s)}><b>{t}</b><span>{d}</span></a>)}
+  </div>
+
+  <h2 id="facts">Key facts</h2>
+  <dl class="docs-facts">
+    {facts.map(([k, v, n]) => <div><dt>{k}</dt><dd><b>{v}</b><span>{n}</span></dd></div>)}
+  </dl>
+  <p class="docs-small">Official addresses are listed only in the <a href="/docs/contracts/">Network and contracts</a> page. Pool: <code>{pool.address}</code>. Every pool transaction so far, with its kind and its proof re-checked, is on <a href="/docs/verify/">Check it yourself</a>. A plain-text summary for scripts is at <a href="/llms.txt">/llms.txt</a>.</p>
+
+  <h2 id="lifecycle">Start to finish</h2>
+  <p>Every shielded asset follows the same path. The two ends touch the public chain. Everything in between is designed to stay inside the pool.</p>
+  <ol class="docs-steps">
+    {steps.map(([t, v, d, s], i) => (
+      <li class:list={[v === 'Public' ? 'pub' : 'shd']}>
+        <div class="docs-steps-top"><span>{String(i + 1).padStart(2, '0')}</span><a href={href(s)}>{t}</a></div>
+        <em><i aria-hidden="true"></i>{v}</em>
+        <p>{d}</p>
+      </li>
+    ))}
+  </ol>
+
+  <h2 id="browse">All docs</h2>
+  <div class="docs-all">
+    {docsNav.map((g) => (
+      <section>
+        <h3>{g.group}</h3>
+        <ul>
+          {g.items.filter((it) => it.slug).map((it) => <li><a href={href(it.slug)}><b>{it.title}</b><span>{desc[it.slug]}</span></a></li>)}
+        </ul>
+      </section>
+    ))}
+  </div>
+</DocsLayout>

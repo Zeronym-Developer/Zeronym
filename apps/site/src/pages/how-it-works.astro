@@ -1,0 +1,196 @@
+---
+import Base from '../layouts/Base.astro';
+import Status from '../components/Status.astro';
+import deployments from '../data/deployments.json';
+import '../styles/sections.css';
+import '../styles/pages.css';
+
+// One row in a mock block explorer: [label, value, hidden?]
+type Field = [string, string, boolean];
+const steps: { id: string; t: string; one: string; body: string; exLabel: string; ex: Field[]; see: string; hidden: string; mind: string; docs: string }[] = [
+  {
+    id: 'shield', t: 'Shield', one: 'Put tokens into the pool.', docs: 'shield',
+    body: 'Deposit a supported token. Inside the pool it becomes encrypted notes that only your keys can read.',
+    exLabel: 'What a block explorer shows',
+    ex: [['From', '0x3f9a…c21e', false], ['To', 'Shielded pool', false], ['Amount', '5,000 USDG', false]],
+    see: 'Your address, the token, the amount and the time.',
+    hidden: 'The notes it creates and who controls them.',
+    mind: 'The token issuer can still freeze or block the token itself.',
+  },
+  {
+    id: 'organize', t: 'Organize', one: 'Sort balances into vaults.', docs: 'vaults',
+    body: 'Group shielded funds by purpose, such as trading or savings. Vault names live on your device, not on the chain.',
+    exLabel: 'What a block explorer shows',
+    ex: [['Type', 'Pool transaction', false], ['From', '', true], ['To', '', true], ['Amount', '', true]],
+    see: 'That a pool transaction happened, and when.',
+    hidden: 'Vault names, balances and which vault holds what.',
+    mind: 'Vaults keep you organized. They do not add extra privacy on their own.',
+  },
+  {
+    id: 'send', t: 'Send', one: 'Pay someone privately.', docs: 'send',
+    body: 'Pay another shielded address. A zero-knowledge proof shows the payment is valid without revealing who, or how much.',
+    exLabel: 'What a block explorer shows',
+    ex: [['Type', 'Pool transaction', false], ['From', '', true], ['To', '', true], ['Amount', '', true]],
+    see: 'That a pool transaction happened, and when.',
+    hidden: 'Who sent it, who received it and how much.',
+    mind: 'The person you pay sees the details, as with any payment.',
+  },
+  {
+    id: 'disclose', t: 'Disclose', one: 'Prove one payment.', docs: 'disclose',
+    body: 'Share a single receipt with an auditor, a client or a tax adviser. Everything outside that receipt stays encrypted.',
+    exLabel: 'What your accountant sees',
+    ex: [['Payment', '1,200 USDG to 0x51c0…77a2', false], ['Date', '23 Oct, 13:05', false], ['Everything else', '', true]],
+    see: 'Nothing new goes on the chain.',
+    hidden: 'All your other payments and vaults.',
+    mind: 'A shared receipt cannot be taken back.',
+  },
+  {
+    id: 'withdraw', t: 'Withdraw', one: 'Take tokens out.', docs: 'withdraw',
+    body: 'Send funds from the pool to any normal address when you are done.',
+    exLabel: 'What a block explorer shows',
+    ex: [['From', 'Shielded pool', false], ['To', '0x2d4e…b810', false], ['Amount', '500 USDG', false]],
+    see: 'The receiving address, the token, the amount and the time.',
+    hidden: 'Which of your notes paid for it.',
+    mind: 'If the amount or timing matches your deposit, someone could guess they are linked.',
+  },
+];
+
+const limits = [
+  { k: 'shd', t: 'Hidden inside the pool', items: ['Who paid whom', 'How much was sent', 'Your balance and vaults', 'Your payment history'] },
+  { k: 'pub', t: 'Still public', items: ['Deposits: address, token, amount, time', 'Withdrawals: address, token, amount, time', 'That a pool transaction happened, and when', 'Your IP address, to the services your app connects to'] },
+  { k: 'warn', t: 'Can weaken your privacy', items: ['Unusual, one-of-a-kind amounts', 'Withdrawing soon after depositing', 'Few people using the pool', 'A hacked device or a leaked key'] },
+];
+---
+<Base title="How it works" path="/how-it-works/" description="Zeronym in one minute: tokens go in publicly, move privately inside a shielded pool, and come out publicly. Here is what stays hidden and what does not.">
+  <section class="pg-hero" aria-labelledby="hw-h">
+    <div class="z-container pg-hero-in">
+      <p class="lp-kicker">How it works</p>
+      <h1 id="hw-h" data-words>Private balances, <em>explained in a minute.</em></h1>
+      <p class="pg-lead">Zeronym is a shielded pool for tokens, live on Robinhood Chain. Tokens go in publicly, move privately inside the pool, and come out publicly when you are done. That is the whole idea.</p>
+      <div class="pg-meta"><Status status={deployments.protocolStatus} /><span class="pg-chip">1 minute read</span></div>
+    </div>
+  </section>
+
+  <section class="lp-sec" aria-labelledby="idea-h">
+    <div class="z-container">
+      <header class="lp-head" data-reveal>
+        <div class="lp-head-l">
+          <p class="lp-kicker"><span>01</span>The idea</p>
+          <h2 id="idea-h" data-words>Public in and out. <em>Private in between.</em></h2>
+        </div>
+        <div class="lp-head-r"><p>On a normal blockchain, every balance and payment is visible to anyone. Zeronym adds a private zone: once tokens are inside the pool, they are stored as encrypted notes that only your keys can read.</p></div>
+      </header>
+
+      <div class="hw-flow" data-reveal>
+        <div class="hw-zone pub">
+          <p class="hw-zone-t"><i aria-hidden="true"></i>Going in · public</p>
+          <div class="fig-win" aria-hidden="true">
+            <span class="fig-bar"><i></i><i></i><i></i><b>deposit</b></span>
+            <span class="fig-row"><span>From</span><span>0x3f9a…c21e</span></span>
+            <span class="fig-row"><span>Token</span><span>USDG</span></span>
+            <span class="fig-row"><span>Amount</span><span>5,000</span></span>
+          </div>
+          <p class="hw-cap">Anyone can see who deposited, which token and how much.</p>
+        </div>
+        <div class="hw-pipe" aria-hidden="true"><span></span></div>
+        <div class="hw-zone shd">
+          <p class="hw-zone-t"><i aria-hidden="true"></i>Inside the pool · private</p>
+          <div class="hw-pool" aria-hidden="true">
+            {['Trading', 'Savings', 'Payroll'].map((v) => (
+              <span class="hw-vault"><b>{v}</b><i></i></span>
+            ))}
+            <span class="hw-note"></span>
+          </div>
+          <p class="hw-cap">Balances, payments and vaults are encrypted. Outsiders only see that something happened.</p>
+        </div>
+        <div class="hw-pipe" aria-hidden="true"><span></span></div>
+        <div class="hw-zone pub">
+          <p class="hw-zone-t"><i aria-hidden="true"></i>Coming out · public</p>
+          <div class="fig-win" aria-hidden="true">
+            <span class="fig-bar"><i></i><i></i><i></i><b>withdrawal</b></span>
+            <span class="fig-row"><span>To</span><span>0x2d4e…b810</span></span>
+            <span class="fig-row"><span>Token</span><span>USDG</span></span>
+            <span class="fig-row"><span>Amount</span><span>500</span></span>
+          </div>
+          <p class="hw-cap">Withdrawals are visible again, like any normal transfer.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-sec" aria-labelledby="steps-h">
+    <div class="z-container">
+      <header class="lp-head" data-reveal>
+        <div class="lp-head-l">
+          <p class="lp-kicker"><span>02</span>Step by step</p>
+          <h2 id="steps-h" data-words>Five actions. <em>Each with a clear limit.</em></h2>
+        </div>
+        <div class="lp-head-r"><p>Pick a step to see what it does, what others can see and what stays hidden.</p></div>
+      </header>
+
+      <div class="hw-steps" id="hw-steps" data-reveal>
+        <div class="hw-tabs" role="tablist" aria-label="Steps">
+          {steps.map((s, i) => (
+            <button type="button" role="tab" id={`tab-${s.id}`} aria-controls={`step-${s.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>
+              <span class="n">{String(i + 1).padStart(2, '0')}</span>
+              <span class="t"><b>{s.t}</b><small>{s.one}</small></span>
+              <i class="bar" aria-hidden="true"></i>
+            </button>
+          ))}
+        </div>
+        <div class="hw-panels">
+          {steps.map((s, i) => (
+            <article class:list={['hw-panel', { on: i === 0 }]} id={`step-${s.id}`} role="tabpanel" aria-labelledby={`tab-${s.id}`}>
+              <div class="hw-panel-copy">
+                <p class="hw-panel-n">Step {i + 1} of {steps.length}</p>
+                <h3>{s.t}</h3>
+                <p>{s.body}</p>
+                <dl class="hw-facts">
+                  <div class="pub"><dt>Others can see</dt><dd>{s.see}</dd></div>
+                  <div class="shd"><dt>Hidden</dt><dd>{s.hidden}</dd></div>
+                  <div class="warn"><dt>Keep in mind</dt><dd>{s.mind}</dd></div>
+                </dl>
+                <a class="lp-link" href={`/docs/${s.docs}/`}>More about {s.t.toLowerCase()} in the docs →</a>
+              </div>
+              <div class="lp-fig hw-fig" aria-hidden="true">
+                <span class="fig-win">
+                  <span class="fig-bar"><i></i><i></i><i></i><b>{s.exLabel}</b></span>
+                  {s.ex.map(([k, v, h]) => (
+                    <span class="fig-row"><span>{k}</span>{h ? <span class="enc">encrypted</span> : <span class="val-on">{v}</span>}</span>
+                  ))}
+                </span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+      <p class="hw-aside">Swaps inside the pool and shared treasuries are coming soon. Each will get its own contracts and review before it goes live.</p>
+    </div>
+  </section>
+
+  <section class="lp-sec" id="at-a-glance" aria-labelledby="limits-h">
+    <div class="z-container">
+      <header class="lp-head" data-reveal>
+        <div class="lp-head-l">
+          <p class="lp-kicker"><span>03</span>The limits</p>
+          <h2 id="limits-h" data-words>Private, not invisible. <em>Know the difference.</em></h2>
+        </div>
+        <div class="lp-head-r"><p>Zeronym hides what happens inside the pool: who paid whom and how much. The edges, deposits and withdrawals, stay public.</p></div>
+      </header>
+      <ul class="hw-limits">
+        {limits.map((l) => (
+          <li class={`lp-card hw-limit ${l.k}`} data-reveal>
+            <h3><i aria-hidden="true"></i>{l.t}</h3>
+            <ul>{l.items.map((it) => <li>{it}</li>)}</ul>
+          </li>
+        ))}
+      </ul>
+      <a class="lp-link hw-more" href="/docs/privacy/">See every detail in What stays private →</a>
+    </div>
+  </section>
+
+
+  <script>
+    import '../scripts/how';
+  </script>
+</Base>

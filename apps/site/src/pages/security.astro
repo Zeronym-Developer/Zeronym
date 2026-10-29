@@ -1,0 +1,138 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/sections.css';
+import '../styles/pages.css';
+
+const never = [
+  ['Message you first', 'Zeronym will not DM you on any app or social network. Anyone who reaches out first, claiming to be support, is not Zeronym.'],
+  ['Ask for your keys', 'No one from Zeronym will ever ask for your seed phrase, spending key or viewing key. Anyone who has them can take your funds or read your history.'],
+  ['Ask you to send funds', 'There is no "verify your wallet", "unlock" or "migration" payment. Sending funds to fix a problem is always a scam.'],
+  ['Use another token address', 'The only official Zeronym token is 0x157ba872a92c2f147c3ea73dabf56daa9ef8fc67. A Zeronym token at any other address, or one sold through a private deal, is not Zeronym.'],
+];
+// Example only: the same start and end, with a few characters changed in the middle.
+const real = '0x3f9a71c0e2b84d59a6f13c7e08b2d4a1f6e5c21e';
+const fake = '0x3f9a71c0e2b84ddda6f13cdd08b2d4d1f6e5c21e';
+const fakeParts = [...fake].map((ch, i) => ({ ch, diff: ch !== real[i] }));
+---
+<Base title="Security" path="/security/" description="How to tell what really comes from Zeronym: what Zeronym will never do, where official links and addresses live, and how to report a problem.">
+  <section class="pg-hero" aria-labelledby="sc-h">
+    <div class="z-container pg-hero-in">
+      <p class="lp-kicker">Security</p>
+      <h1 id="sc-h" data-words>Check before you trust. <em>Every single time.</em></h1>
+      <p class="pg-lead">Scammers copy privacy and token projects with fake sites, fake accounts and fake tokens. This page shows what Zeronym will never do, where the real links and addresses live, and how to check them yourself.</p>
+    </div>
+  </section>
+
+  <section class="lp-sec" aria-labelledby="never-h">
+    <div class="z-container">
+      <header class="lp-head" data-reveal>
+        <div class="lp-head-l">
+          <p class="lp-kicker"><span>01</span>The never list</p>
+          <h2 id="never-h" data-words>What Zeronym will never do. <em>No exceptions.</em></h2>
+        </div>
+        <div class="lp-head-r"><p>If something breaks one of these rules, it is not Zeronym, however official it looks. Stop, and do not reply or click.</p></div>
+      </header>
+      <div class="sc-never">
+        <ol class="sc-list" data-reveal>
+          {never.map(([t, d]) => (
+            <li><i class="x" aria-hidden="true">✕</i><div><b>Never {t.charAt(0).toLowerCase() + t.slice(1)}</b><span>{d}</span></div></li>
+          ))}
+        </ol>
+        <div class="lp-fig sc-scam" data-reveal aria-hidden="true">
+          <div class="sc-dm">
+            <span class="sc-dm-head"><i></i><span>Zeronym Support ✓<small>sent you a message</small></span></span>
+            <p class="sc-bubble">Hi! Your shielded balance is <mark>frozen</mark>. To unlock it, <mark>send 0.1 ETH</mark> and confirm your <mark>seed phrase</mark> here within 24 hours.</p>
+            <span class="sc-flags"><span>Messaged you first</span><span>Asked for funds</span><span>Asked for your keys</span><span>Rushed you</span></span>
+          </div>
+          <span class="fig-stamp">Scam</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-sec" aria-labelledby="official-h">
+    <div class="z-container">
+      <header class="lp-head" data-reveal>
+        <div class="lp-head-l">
+          <p class="lp-kicker"><span>02</span>Official sources</p>
+          <h2 id="official-h" data-words>Where the real thing lives. <em>And how to check it.</em></h2>
+        </div>
+        <div class="lp-head-r"><p>Three places matter: this website, the contract list in the docs, and the X and Telegram accounts listed here.</p></div>
+      </header>
+      <ul class="lp-figs">
+        <li class="lp-card lp-figcard" data-reveal>
+          <div class="lp-fig" aria-hidden="true">
+            <div class="sc-look">
+              <span class="ok"><span>zeronym</span><small>✓ real</small></span>
+              <span class="bad"><span>zer<em>0</em>nym</span><small>✕ zero</small></span>
+              <span class="bad"><span>zerony<em>rn</em></span><small>✕ r + n</small></span>
+            </div>
+          </div>
+          <div class="lp-figbody">
+            <p class="lp-figno">CHECK 2.1</p>
+            <h3>Read the address bar</h3>
+            <p>Fake sites swap look-alike letters, such as a zero for an "o" or "rn" for "m". Type the address yourself or use a bookmark, rather than clicking links in messages or ads.</p>
+          </div>
+        </li>
+        <li class="lp-card lp-figcard" data-reveal>
+          <div class="lp-fig" aria-hidden="true">
+            <div class="sc-addr">
+              <span><small>Official list · example</small><code>{real}</code></span>
+              <span class="bad"><small>✕ Look-alike · same start and end</small><code>0x{fakeParts.slice(2).map((p) => (p.diff ? <em>{p.ch}</em> : p.ch))}</code></span>
+            </div>
+          </div>
+          <div class="lp-figbody">
+            <p class="lp-figno">CHECK 2.2</p>
+            <h3>Compare every character</h3>
+            <p>Contract addresses are listed only on the Network and contracts page in the docs. Fake addresses often match the first and last few characters, so check the whole address.</p>
+            <a class="lp-link" href="/docs/contracts/">Open the contract list →</a>
+          </div>
+        </li>
+        <li class="lp-card lp-figcard" data-reveal>
+          <div class="lp-fig" aria-hidden="true">
+            <div class="sc-soc">
+              <span>X / Twitter<b>@zeronym_app</b></span>
+              <span>Telegram<b>t.me/Zeronym_pro</b></span>
+              <span>GitHub<b>Not announced</b></span>
+            </div>
+          </div>
+          <div class="lp-figbody">
+            <p class="lp-figno">CHECK 2.3</p>
+            <h3>Only accounts listed here</h3>
+            <p>The official accounts are <a class="alink" href="https://x.com/zeronym_app" target="_blank" rel="noopener">@zeronym_app on X</a> and <a class="alink" href="https://t.me/Zeronym_pro" target="_blank" rel="noopener">Zeronym_pro on Telegram</a>. Any other account is not Zeronym, and none of them will message you first.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="lp-sec" aria-labelledby="report-h">
+    <div class="z-container">
+      <header class="lp-head" data-reveal>
+        <div class="lp-head-l">
+          <p class="lp-kicker"><span>03</span>Report a problem</p>
+          <h2 id="report-h" data-words>Found a bug or a scam? <em>Here is what to do.</em></h2>
+        </div>
+      </header>
+      <ul class="sc-report">
+        <li class="lp-card" data-reveal>
+          <h3>Security vulnerability</h3>
+          <p>Email <a href="mailto:support@zeronym.lat">support@zeronym.lat</a> with the details and how to reproduce it. Please don't share it in public until it's fixed. The same contact is in <a href="/.well-known/security.txt"><code>/.well-known/security.txt</code></a>.</p>
+        </li>
+        <li class="lp-card" data-reveal>
+          <h3>Suspected scam</h3>
+          <ol>
+            <li>Do not connect your wallet, sign anything or send funds.</li>
+            <li>Check the address against the <a class="lp-link" href="/docs/contracts/">Network and contracts</a> page.</li>
+            <li>Report the account or site on the platform where you found it.</li>
+          </ol>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+
+  <script>
+    import '../scripts/sections';
+  </script>
+</Base>

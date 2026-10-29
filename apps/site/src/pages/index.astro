@@ -1,0 +1,295 @@
+---
+import Base from '../layouts/Base.astro';
+import Status from '../components/Status.astro';
+import CtaSection from '../components/CtaSection.astro';
+import deployments from '../data/deployments.json';
+import '../styles/sections.css';
+import '../styles/landing.css';
+
+// Labels that ride the particle stream in the hero (sample data).
+const txs = [
+  { in: '0x3f9a…c21e · 1,250 USDG', out: '0x2d4e…b810 · 500 USDG' },
+  { in: '0x8b3d…e41c · 4,000 USDG', out: '0x51c0…77a2 · 800 USDG' },
+  { in: '0x9e0b…4a13 · 9,000 USDG', out: '0x7a11…c3d0 · 2,000 USDG' },
+  { in: '0x44c2…19fe · 640 USDG', out: '0x0d9b…a6e5 · 120 USDG' },
+  { in: '0xb7e0…2c58 · 350 USDG', out: '0xe2f4…9031 · 100 USDG' },
+];
+const vaults = ['Trading', 'Long-term', 'Contributors'];
+
+const chapters = [
+  {
+    title: 'Public by default',
+    body: 'On most blockchains, anyone can read the balances, payments and counterparties tied to an address. Opening more wallets does not fix it: funding links and timing connect them.',
+    bounds: [['pub', 'Visible to anyone: holdings, payments, counterparties and history']],
+  },
+  {
+    title: 'Shield',
+    body: 'Deposit a supported token into the shielded pool. Inside, your balance becomes encrypted notes that only your keys can read, and each spend is proved valid with a zero-knowledge proof.',
+    bounds: [['pub', 'Public: the deposit address, asset and amount'], ['shd', 'Private: the notes it creates']],
+  },
+  {
+    title: 'Organize into vaults',
+    body: 'Sort shielded assets by purpose: trading, long-term, contributors. Vault names stay on your device, and moving value between vaults is a real, proved transfer.',
+    bounds: [['shd', 'Private: vault labels and balances'], ['note', 'Vaults do not create separate anonymity sets']],
+  },
+  {
+    title: 'Disclose one record',
+    body: 'Need to prove a payment? Share a single receipt with a stated scope. Your other vaults and history stay encrypted.',
+    bounds: [['note', 'A shared receipt cannot be taken back']],
+  },
+  {
+    title: 'Withdraw',
+    body: 'Release assets to any external address when you are done. Like the deposit, the withdrawal is public on the host chain.',
+    bounds: [['pub', 'Public: destination, asset, amount and time']],
+  },
+];
+
+
+
+// "Scrub through a day" demo (sample data).
+// One sample day, seen by a stranger watching the chain.
+// zn: what the same step looks like through Zeronym. Public steps stay readable.
+const day = [
+  { t: '09:12', what: 'Received from 0x3f9a…c21e', amt: '+5,000 USDG', zn: 'Deposit into the pool', znPub: true },
+  { t: '11:40', what: 'Paid 0x8b3d…e41c', amt: '−250 USDG', zn: 'Pool transaction', znPub: false },
+  { t: '13:05', what: 'Paid 0x51c0…77a2', amt: '−1,200 USDG', zn: 'Pool transaction', znPub: false },
+  { t: '15:22', what: 'Sent to your other wallet', amt: '−2,000 USDG', zn: 'Pool transaction', znPub: false },
+  { t: '18:47', what: 'Paid 0x2d4e…b810', amt: '−500 USDG', zn: 'Withdrawal to 0x2d4e…b810', znPub: true },
+];
+const outcome = {
+  pub: [['Payments visible', '5 of 5'], ['Your balance', '1,050 USDG'], ['Your other wallet', 'Linked to you']],
+  zn: [['Payments visible', '2 of 5'], ['Your balance', 'Hidden'], ['Your other wallet', 'Hidden']],
+};
+
+const faqs = [
+  ['Is Zeronym live?', 'The shielded pool is live on Robinhood Chain mainnet for USDG, and the Zeronym token (Znym) is live at 0x157ba872a92c2f147c3ea73dabf56daa9ef8fc67. Shared treasuries and swaps inside the pool are coming soon. Every official address is on the Network and contracts page in the docs.'],
+  ['Can I check that it works?', 'Yes, without trusting this site. Shields, a private transfer and withdrawals have all run on mainnet in pool 0x84c21f20959f0d00892007f2a7cfe46d19077877 on Robinhood Chain (chain ID 4663), and every proof is accepted by the deployed verifier. The pool, verifier and ETH exit sources are verified on Sourcify and Blockscout. The private transfer is 0x2ffa4b903d2bd35a5e0879a6a5165d7a1e550dc3a92ed70a33d2f91500b3837e: extAmount is 0, only the 0.50 USDG relayer fee leaves the pool, and its events show no sender, recipient or amount. Its admin, read with admin(), is a 2-of-3 Safe (getThreshold() returns 2) that can only turn deposits on or off. zeronym.lat/docs/verify/ lists each transaction with its kind and gives a read-only script that re-checks them all. A plain-text summary with event names is at zeronym.lat/llms.txt.'],
+  ['What does Zeronym hide?', 'Who paid whom and how much, for every transfer inside the pool. The chain only sees encrypted notes and spent-note markers. Deposits into the pool and withdrawals out of it are public, like any token transfer. Privacy grows with the pool: every new deposit and transfer widens the crowd (the anonymity set) your notes blend into.'],
+  ['Will deposits earn yield?', 'No. Deposits do not earn yield, and user principal must not be lent or used as operating capital without explicit authorization.'],
+  ['What is the token address?', 'The only official Zeronym token (Znym) is 0x157ba872a92c2f147c3ea73dabf56daa9ef8fc67 on Robinhood Chain. Its supply is fixed at 1,000,000,000 with no mint function, and the pool does not need it. A Zeronym token at any other address is not Zeronym.'],
+  ['Who holds my keys?', 'You do. Spending keys, viewing keys and private notes stay on your device. Losing your recovery material may mean losing access to shielded funds.'],
+];
+---
+<Base title="Home" path="/" bodyClass="home" description="Zeronym is a shielded pool for USDG on Robinhood Chain: shield USDG, pay privately inside the pool, and share only the records you choose.">
+
+  <div class="lp-wrap" id="lp-wrap">
+    <div class="lp-scene" aria-hidden="true">
+      <canvas id="lp-canvas"></canvas>
+      <picture class="lp-fallback">
+        <source srcset="/zeronym-mark.webp" type="image/webp" />
+        <img src="/zeronym-mark.jpg" width="533" height="720" alt="" />
+      </picture>
+      <div class="lp-labels" id="lp-labels">
+        {txs.map((t) => <div class="tx" data-in={t.in} data-out={t.out}><i></i><span>{t.in}</span></div>)}
+        {vaults.map((v) => <div class="vlabel"><b>{v}</b><small>local label</small></div>)}
+      </div>
+      <div class="lp-lens" id="lp-lens"><span>shielded view</span></div>
+    </div>
+
+    <section class="lp-hero" id="lp-hero" aria-labelledby="lp-title">
+      <div class="z-container lp-hero-top" aria-hidden="true">
+      </div>
+      <div class="z-container lp-hero-main">
+        <div class="lp-hero-meta">
+          <a class="lp-live" href="/docs/contracts/"><i aria-hidden="true"></i><span>Live on Robinhood Chain</span></a>
+        </div>
+        <h1 id="lp-title"><span class="ln"><span>Your payments,</span></span> <span class="ln"><span>private inside the pool.</span></span></h1>
+        <div class="lp-hero-row">
+          <p class="lp-sub">Zeronym is a shielded pool for USDG on Robinhood Chain. Shield USDG into an encrypted pool, pay privately inside it, sort your balance into vaults, and reveal only the records you choose.</p>
+          <div class="btn-row">
+            <a class="z-button z-button-primary" href="/app/">Launch App</a>
+            <a class="z-button z-button-secondary" href="/docs/">Read the docs</a>
+          </div>
+        </div>
+        <div class="lp-hero-foot">
+          <p class="lp-honest"><span><i class="sym-pub" aria-hidden="true"></i>Deposits and withdrawals stay public.</span> <span><i class="sym-shd" aria-hidden="true"></i>Transfers inside the pool are designed to stay private.</span></p>
+          <p class="lp-hint" aria-hidden="true">Move your cursor over the stream</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="lp-story" id="lp-story" aria-label="How Zeronym is designed to work">
+      <div class="lp-pin">
+        <ol class="lp-caps">
+          {chapters.map((c, i) => (
+            <li class="lp-cap" data-k={i + 1} data-side={i % 2 ? 'right' : 'left'}>
+              <span class="lp-num">{String(i + 1).padStart(2, '0')} <i>/ 05</i></span>
+              <h2>{c.title}</h2>
+              <p>{c.body}</p>
+              {i === 3 && (
+                <div class="receipt lp-receipt" id="receipt">
+                  <div class="receipt-head">
+                    <b>Payment receipt <small>sample data</small></b>
+                    <button class="toggle" id="disclose-btn" type="button" aria-pressed="false" aria-controls="receipt-fields"><span class="knob" aria-hidden="true"></span><span id="disclose-label">Disclose this receipt</span></button>
+                  </div>
+                  <div class="fields" id="receipt-fields" aria-live="polite">
+                    <div class="field"><small>Reference</small><div class="val"><span class="v" hidden>ZR-7F3A</span><span class="cover"></span></div></div>
+                    <div class="field"><small>Status</small><div class="val"><span class="v ok" hidden>✓ Credited</span><span class="cover"></span></div></div>
+                    <div class="field"><small>Amount</small><div class="val"><span class="v" hidden>250.00 USDG</span><span class="cover"></span></div></div>
+                    <div class="field"><small>Recipient</small><div class="val"><span class="v" hidden>0x8b3d…e41c</span><span class="cover"></span></div></div>
+                  </div>
+                </div>
+              )}
+              <ul class="lp-bounds">
+                {c.bounds.map(([k, text]) => <li class={k}>{text}</li>)}
+              </ul>
+              {i === 4 && <a class="lp-link" href="/how-it-works/#at-a-glance">See every action's privacy boundary →</a>}
+            </li>
+          ))}
+        </ol>
+        <nav class="lp-rail" aria-label="Story chapters">
+          {chapters.map((c, i) => <button type="button" data-k={i + 1}><span>{c.title}</span><i aria-hidden="true"></i></button>)}
+        </nav>
+      </div>
+    </section>
+  </div>
+
+  <section class="lp-sec lp-day-sec" aria-labelledby="day-h">
+    <div class="z-container">
+      <header class="lp-head" data-reveal>
+        <div class="lp-head-l">
+          <p class="lp-kicker"><span>01</span>See the difference</p>
+          <h2 id="day-h" data-words>One day, two views. <em>See what others learn.</em></h2>
+        </div>
+        <div class="lp-head-r">
+          <p>The same five payments, as a stranger watching the chain would see them. On the left from a normal wallet, on the right through Zeronym.</p>
+        </div>
+      </header>
+
+      <div class="cmp" id="cmp" data-reveal>
+        {(['pub', 'zn'] as const).map((m) => (
+          <div class={`cmp-col ${m}`}>
+            <div class="cmp-head">
+              <p class="cmp-title"><i aria-hidden="true"></i>{m === 'pub' ? 'Normal wallet' : 'With Zeronym'}</p>
+              <p class="cmp-sub">{m === 'pub' ? 'Everything is public' : 'Only the edges are public'}</p>
+            </div>
+            <ol class="cmp-feed">
+              {day.map((e, i) => {
+                const hidden = m === 'zn' && !e.znPub;
+                return (
+                  <li class:list={['cmp-row', { hid: hidden }]} style={`--i:${i}`}>
+                    <span class="t">{e.t}</span>
+                    <span class="what">{m === 'pub' ? e.what : e.zn}</span>
+                    {hidden ? <span class="amt enc" aria-label="amount hidden"></span> : <span class="amt">{m === 'zn' && i === 0 ? '5,000 USDG' : m === 'zn' && i === 4 ? '500 USDG' : e.amt}</span>}
+                    <em class={hidden ? 'shd' : 'pub'}>{hidden ? 'hidden' : 'public'}</em>
+                  </li>
+                );
+              })}
+            </ol>
+            <dl class="cmp-out">
+              {outcome[m].map(([k, v]) => (
+                <div class:list={[{ bad: v === 'Linked to you' || v === '5 of 5' || v === '1,050 USDG', good: v === 'Hidden' }]}><dt>{k}</dt><dd>{v}</dd></div>
+              ))}
+            </dl>
+          </div>
+        ))}
+        <div class="cmp-foot">
+          <p><b>!</b> Deposits and withdrawals stay public. If their amounts or timing match, someone could still guess they are linked.</p>
+          <button type="button" class="cmp-replay" id="cmp-replay"><span aria-hidden="true">↻</span> Replay the day</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-sec" aria-labelledby="who-h">
+    <div class="z-container">
+      <header class="lp-head" data-reveal>
+        <div class="lp-head-l">
+          <p class="lp-kicker"><span>02</span>Who it helps</p>
+          <h2 id="who-h" data-words>Keep your finances <em>off public display.</em></h2>
+        </div>
+        <div class="lp-head-r">
+          <p>On a public blockchain, anyone who learns one of your addresses can see your balance, every payment and who you deal with. Here are three common cases. Each picture switches between what people can see today and what Zeronym is designed to hide. Tap one to switch it yourself.</p>
+        </div>
+      </header>
+      <ul class="lp-figs">
+        <li class="lp-card lp-figcard" data-reveal>
+          <button class="lp-fig fig-wallet" type="button" aria-pressed="false" aria-label="Individuals: switch between today and with Zeronym">
+            <span class="fig-state"><i>Today</i><i>With Zeronym</i></span>
+            <span class="fig-win">
+              <span class="fig-bar"><i></i><i></i><i></i><b>explorer</b></span>
+              <span class="fig-addr"><span class="a">0x3f9a…c21e</span><span class="z">shielded notes</span></span>
+              {[['USDG', '18,402.17'], ['Payments', '37'], ['Last payment', '→ 0x8b3d…e41c']].map(([k, v]) => (
+                <span class="fig-row"><span>{k}</span><span class="val"><span class="a">{v}</span><span class="z"></span></span></span>
+              ))}
+            </span>
+          </button>
+          <div class="lp-figbody">
+            <p class="lp-figno">FIG. 2.1</p>
+            <h3>Individuals</h3>
+            <p>If someone knows your address, perhaps from a single payment, they can see every token you hold and everyone you have paid. Inside Zeronym, your balance is kept as encrypted notes that only your keys can read.</p>
+            <a class="lp-link" href="/docs/shield/">How shielding works →</a>
+          </div>
+        </li>
+        <li class="lp-card lp-figcard" data-reveal>
+          <button class="lp-fig fig-tree" type="button" aria-pressed="false" aria-label="Communities and treasuries: switch between today and with Zeronym">
+            <span class="fig-state"><i>Today</i><i>With Zeronym</i></span>
+            <svg viewBox="0 0 320 180" aria-hidden="true">
+              <rect class="hub" x="22" y="68" width="92" height="44" rx="10" />
+              <text class="hub-t" x="68" y="95" text-anchor="middle">Treasury</text>
+              {[['0x51c0…77a2', '1,200', 34], ['0x0d9b…a6e5', '800', 90], ['0x7a11…c3d0', '2,500', 146]].map(([to, amt, y]) => (
+                <g>
+                  <path class="ln" d={`M114 90 C 170 90, 170 ${y}, 214 ${y}`} pathLength="1" />
+                  <circle class="dot" cx="214" cy={y} r="5" />
+                  <text class="to a" x="224" y={Number(y) - 2}>{to}</text>
+                  <text class="to z" x="224" y={Number(y) - 2}>encrypted note</text>
+                  <text class="amt a" x="224" y={Number(y) + 14}>{amt} USDG</text>
+                  <text class="amt z" x="224" y={Number(y) + 14}>amount hidden</text>
+                </g>
+              ))}
+            </svg>
+          </button>
+          <div class="lp-figbody">
+            <p class="lp-figno">FIG. 2.2</p>
+            <h3>Communities and treasuries</h3>
+            <p>When a team pays contributors from a public treasury, everyone can see who was paid and how much. With Zeronym, you can pay them inside the pool today, so recipients and amounts are encrypted. Shared treasuries, with group spending rules, are coming soon.</p>
+            <a class="lp-link" href="/docs/shared-treasuries/">About shared treasuries →</a>
+          </div>
+        </li>
+        <li class="lp-card lp-figcard" data-reveal>
+          <button class="lp-fig fig-trade" type="button" aria-pressed="false" aria-label="Active traders: switch between today and with Zeronym">
+            <span class="fig-state"><i>Today</i><i>With Zeronym</i></span>
+            <span class="fig-win">
+              <span class="fig-bar"><i></i><i></i><i></i><b>transfers</b></span>
+              {[['09:01', 'Wallet A → Wallet B', 'Trading → Long-term'], ['09:03', 'Wallet B → Wallet C', 'Vault move'], ['09:04', 'Wallet C → DEX', 'Pool transaction']].map(([t, a, z]) => (
+                <span class="fig-row"><span class="t">{t}</span><span class="what"><span class="a">{a}</span><span class="z">{z}</span></span><span class="val"><span class="a">50,000</span><span class="z"></span></span></span>
+              ))}
+              <span class="fig-foot"><span class="a">Linked in 3 hops</span><span class="z">Deposits and withdrawals stay public</span></span>
+            </span>
+          </button>
+          <div class="lp-figbody">
+            <p class="lp-figno">FIG. 2.3</p>
+            <h3>Active traders</h3>
+            <p>Moving funds between your own wallets leaves a trail that others can follow, and copy, before you are done. With Zeronym, moves between your vaults stay inside the pool. Money going in and coming out is still public.</p>
+            <a class="lp-link" href="/docs/vaults/">How vaults work →</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="lp-sec" aria-labelledby="faq">
+    <div class="z-container lp-faq">
+      <div class="lp-faq-head" data-reveal>
+        <p class="lp-kicker"><span>03</span>Before you begin</p>
+        <h2 id="faq" data-words>Clear answers.</h2>
+        <p>The short version. The docs cover each answer in detail.</p>
+        <a class="lp-link" href="/docs/faq/">Read the full FAQ →</a>
+      </div>
+      <div class="faq lp-faq-list">
+        {faqs.map(([q, a], i) => (
+          <details open={i === 1}>
+            <summary><span class="n">{String(i + 1).padStart(2, '0')}</span><span class="q">{q}</span></summary>
+            <div class="lp-faq-a"><p>{a}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaSection n="04" kicker="Read the design" title="Check every claim" em="before you trust it." body="Shields, a private transfer and withdrawals have already run on mainnet, and the deployed verifier accepted every proof. Each one is listed with its transaction, and a read-only script re-checks them all." primary={['/docs/', 'Read the docs']} secondary={['/docs/verify/', 'Check it yourself']} />
+
+  <script>
+    import '../scripts/landing';
+  </script>
+</Base>
